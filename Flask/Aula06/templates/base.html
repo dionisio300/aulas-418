@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 6</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+    <style>
+        body{
+            margin: 0px;
+            padding: 0px;
+        }
+        header{
+            display: flex;
+            background-color: rgb(125, 125, 219);
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px;
+        }
+        ul li{
+            display: inline;
+            margin-left: 10px;
+        }
+        
+        a{
+            text-decoration:none;
+            color: black;
+        }
+        .marca span{
+            font-size: 25pt;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="marca">
+            <span>Terceiriza</span>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="{{url_for('paginaInicial')}}">Home</a></li>
+                <li><a href="{{url_for('pagina1')}}">Página 1</a></li>
+                <li><a href="{{url_for('pagina2')}}">Página 2</a></li>
+                <li><a href="{{url_for('pagina3')}}">Página 3</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    {% block conteudo %}
+
+    {% endblock %}
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
+
+</html>

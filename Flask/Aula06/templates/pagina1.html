@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<style>
+    form div{
+        margin-bottom: 20px;
+    }
+</style>
+
+<h1>Formulário de Cadastro:</h1>
+
+<form action="{{url_for('pagina1')}}" method="post">
+    <div>
+        <label for="nome">Nome:</label>
+        <input type="text" name="nome" id="nome">
+    </div>
+    <div>
+        <label for="idade">Idade:</label>
+        <input type="text" name="idade" id="nome">
+    </div>
+    <div>
+        <label for="area">Área de trabalho:</label>
+        <select name="area" id="area">
+            <option value="dev">Desenvolvimento</option>
+            <option value="educacao">Educação</option>
+            <option value="seguranca">Segurança</option>
+            <option value="mobilidade">Mobilidade</option>
+        </select>
+    </div>
+
+    <div>
+        <input type="submit" value="Enviar">
+    </div>
+    
+</form>
+
+{% endblock %}

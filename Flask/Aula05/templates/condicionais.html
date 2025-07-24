@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>Condicionais</h1>
+    {% if logado == True %}
+
+        <h1>Seja bem-vindo {{usuario.nome}}</h1>
+        <h2>Idade: {{usuario.idade}}</h2>
+        <h2>E-mail: {{usuario.email}}</h2>
+
+    {% else %}
+        <h1>Usuário ainda não está logado!!</h1>
+
+    {% endif %}
+
+    {% if nota >= 7 %}
+        <h2 style="color: green;">Passou!!</h2>
+    {% elif nota >= 4 %}
+        <h2 style="color:yellow"> Recuperação </h2>
+    {% else %}
+        <h2 style="background-color: red;">Reprovado!</h2>
+    {% endif %}
+
+
+
+    
+</body>
+</html>
