@@ -32,8 +32,21 @@ def agendar():
         
         return render_template('confirmacaoServico.html',dadosServico = dadosServico)
 
-@app.route('/cadastrar')
+@app.route('/cadastrar', methods=['GET', 'POST'])
 def cadastrar():
-    return render_template('cadastrar.html')
+    if request.method == 'GET':
+        return render_template('cadastrar.html')
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        email = request.form.get('email')
+        senha = request.form.get('senha')
+        dtNascimento = request.form.get('dataNascimento')
+        cpf = request.form.get('cpf')
+        cep = request.form.get('cep')
+        tipoUsuario = request.form.get('tipoUsuario')
+
+        print(f'Nome: {nome}, Email: {email}, senha: {senha}, Data: {dtNascimento}, CPF: {cpf}, CEP: {cep}, Tipo Usuário: {tipoUsuario}')
+        return render_template('cadastrar.html')
+
 
 app.run(debug=True)
