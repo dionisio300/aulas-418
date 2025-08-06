@@ -58,6 +58,13 @@ def cadastrar():
         cep = request.form.get('cep')
         tipoUsuario = request.form.get('tipoUsuario')
 
+        conexao = conectar()
+        cursor = conexao.cursor(dictionary=True)
+        sql = "INSERT INTO usuarios (nome, data_nascimento, cpf, cep, tipo_usuario,senha) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql,(nome,dtNascimento,cpf,cep,tipoUsuario,senha))
+        conexao.commit()
+        conexao.close()
+
         print(f'Nome: {nome}, Email: {email}, senha: {senha}, Data: {dtNascimento}, CPF: {cpf}, CEP: {cep}, Tipo Usuário: {tipoUsuario}')
         return render_template('cadastrar.html')
 
