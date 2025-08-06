@@ -1,4 +1,17 @@
 from flask import Flask, render_template,request,redirect,url_for
+import mysql.connector as my
+
+def conectar():
+    conexao = my.connect(
+        host='localhost',
+        user='root',
+        password='1234',
+        database='atendimento'
+    )
+    return conexao
+
+conectar()
+
 app = Flask(__name__)
 @app.route('/')
 def paginaInicial():
