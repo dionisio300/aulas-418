@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+    <!-- Vamos deixar essa página inicial com a cara de uma página inicial de um sistema de agendamento de eventos, começando por mostrar a nossa lista de serviços e deixando uns locais para se colocar algumas imagens -->
+    <div class="hero-section">
+        <div class="hero-text">
+            <h1>Conectando Prestadores de Serviço e Clientes</h1>
+            <p>Encontre profissionais qualificados para o que você precisa ou ofereça seus serviços para quem procura!</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Sou Prestador de Serviço</a>
+                <a href="#" class="btn btn-secondary">Sou Cliente</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <!-- Local para imagem principal -->
+            <img src="https://associacaoneo.com.br/wp-content/uploads/rgc-manual-operacional-blog.webp" alt="Conexão entre prestadores e clientes">
+        </div>
+    </div>
+
+    <section class="how-it-works">
+        <h2>Como Funciona</h2>
+        <div class="steps">
+            <div class="step">
+                <img src="https://cdn-icons-png.flaticon.com/512/9771/9771721.png" alt="Cadastro">
+                <h3>1. Cadastre-se</h3>
+                <p>Crie sua conta como prestador ou cliente em poucos minutos.</p>
+            </div>
+            <div class="step">
+                <img src="https://st2.depositphotos.com/3369547/5313/v/450/depositphotos_53137909-stock-illustration-done-deal.jpg" alt="Procure ou Ofereça">
+                <h3>2. Procure ou Ofereça</h3>
+                <p>Busque serviços ou anuncie suas habilidades para novos clientes.</p>
+            </div>
+            <div class="step">
+                <img src="https://cdn-icons-png.flaticon.com/512/1570/1570277.png" alt="Conecte-se">
+                <h3>3. Conecte-se</h3>
+                <p>Converse, negocie e feche negócios com facilidade e segurança.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-list">
+        <h2>Principais Serviços</h2>
+        <div class="services">
+            <div class="service-card">
+                <img src="https://i0.wp.com/s3.sa-east-1.amazonaws.com/static.inbep.com.br/wp-content/uploads/2022/10/17154128/image-2-e1666032133196.png?resize=600%2C370&ssl=1" alt="Serviço 1">
+                <h4>Eletricista</h4>
+            </div>
+            <div class="service-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJBq2xseC32t1n0_WjWrmwksFU75ypYTlD7Q&s" alt="Serviço 2">
+                <h4>Encanador</h4>
+            </div>
+            <div class="service-card">
+                <img src="https://thestartlaw.com/wp-content/uploads/2022/10/contrato-de-empregada-domestica.png" alt="Serviço 3">
+                <h4>Diarista</h4>
+            </div>
+            <div class="service-card">
+                <img src="https://png.pngtree.com/png-vector/20190927/ourlarge/pngtree-toy-s-baby-clipart-vector-png-element-png-image_1753517.jpg" alt="Serviço 4">
+                <h4>Babá</h4>
+            </div>
+            <!-- Adicione mais serviços conforme necessário -->
+        </div>
+    </section>
+
+    <section class="call-to-action">
+        <h2>Junte-se à nossa comunidade!</h2>
+        <p>Seja você um prestador de serviço em busca de novas oportunidades ou um cliente procurando profissionais confiáveis, nosso sistema é o lugar certo para você.</p>
+        <a href="#" class="btn btn-primary">Cadastre-se Agora</a>
+    </section>
+
+    <style>
+    .hero-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #f5f7fa;
+        padding: 40px 20px;
+        border-radius: 12px;
+        margin-bottom: 32px;
+    }
+    .hero-text {
+        max-width: 50%;
+        margin-left: 10%;
+    }
+    
+    .hero-text h1 {
+        font-size: 2.5rem;
+        color: #2d3748;
+        margin-bottom: 16px;
+  
+    }
+    .hero-text p {
+        font-size: 1.2rem;
+        color: #4a5568;
+        margin-bottom: 24px;
+
+    }
+    .cta-buttons .btn {
+        margin-right: 16px;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+
+    }
+    .btn-primary {
+        background: #3182ce;
+        color: #fff;
+    }
+    .btn-secondary {
+        background: #e2e8f0;
+        color: #2d3748;
+    }
+    .hero-image img {
+        width: 320px;
+        height: auto;
+        border-radius: 10px;
+        background: #cbd5e1;
+    }
+    .hero-image {
+        margin-right: 10%;
+    }
+    .how-it-works {
+        text-align: center;
+        margin: 48px 0 32px 0;
+    }
+    .how-it-works h2 {
+        font-size: 2rem;
+        color: #2d3748;
+        margin-bottom: 24px;
+    }
+    .steps {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+    }
+    .step {
+        background: #fff;
+        padding: 24px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        width: 220px;
+    }
+    .step img {
+        width: 64px;
+        margin-bottom: 12px;
+    }
+    .step h3 {
+        font-size: 1.1rem;
+        color: #3182ce;
+        margin-bottom: 8px;
+    }
+    .services-list {
+        margin: 48px 0;
+        text-align: center;
+    }
+    .services-list h2 {
+        font-size: 2rem;
+        color: #2d3748;
+        margin-bottom: 24px;
+    }
+    .services {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+    .service-card {
+        background: #fff;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        width: 160px;
+        text-align: center;
+    }
+    .service-card img {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .service-card h4 {
+        color: #2d3748;
+        font-size: 1rem;
+    }
+    .call-to-action {
+        background: #3182ce;
+        color: #fff;
+        padding: 40px 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin-top: 48px;
+    }
+    .call-to-action h2 {
+        font-size: 2rem;
+        margin-bottom: 16px;
+    }
+    .call-to-action p {
+        font-size: 1.1rem;
+        margin-bottom: 24px;
+    }
+    .call-to-action .btn-primary {
+        background: #fff;
+        color: #3182ce;
+        border: none;
+    }
+    @media (max-width: 900px) {
+        .hero-section {
+            flex-direction: column;
+            text-align: center;
+        }
+        .hero-text, .hero-image {
+            max-width: 100%;
+        }
+        .steps, .services {
+            flex-direction: column;
+            gap: 16px;
+        }
+    }
+    </style>
+
+{% endblock %}

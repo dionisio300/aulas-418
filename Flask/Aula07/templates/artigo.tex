@@ -1,0 +1,968 @@
+\documentclass{ieeeaccess}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{booktabs} 
+\usepackage{amssymb}
+\bibliographystyle{IEEEtran}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+\history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
+\doi{10.1109/ACCESS.2017.DOI}
+
+\title{Scalable Data Acquisition System for Long-Range Monitoring of Photovoltaic Plants in Real-Time}
+
+\author{
+\uppercase{Dionizio Porfírio de Assis}\authorrefmark{1}, 
+\uppercase{Leticia de Oliveira Santos}\authorrefmark{1}, 
+\uppercase{Paulo Cesar Marques de Carvalho}\authorrefmark{1}, 
+\uppercase{Renata Imaculada Soares Pereira}\authorrefmark{2}, 
+\uppercase{José Janiere S. de Souza}\authorrefmark{3}
+}
+
+\address[1]{Department of Electrical Engineering, Federal University of Ceará (UFC), Fortaleza, Ceará, Brazil \\
+(e-mails: dionisioassis80@gmail.com; leticia@fisica.ufc.br; carvalho@dee.ufc.br)}
+
+\address[2]{Department of Electronics, Federal Institute of Alagoas - Arapiraca campus (IFAL), Arapiraca, Alagoas, Brazil \\
+(e-mail: renata.pereira@ifal.edu.br)}
+
+\address[3]{Federal Institute of Education, Science and Technology of Ceará (IFCE), Cedro Campus, Cedro, Ceará, Brazil \\
+(e-mail: janieresouza@dee.ufc.br)}
+
+% \tfootnote{This work was supported in part by [Inserir Informações sobre Financiamento].}
+
+\markboth
+{Dionizio P. de Assis \headeretal: Scalable Data Acquisition System for Long-Range Monitoring of Photovoltaic Plants}
+{Dionizio P. de Assis \headeretal: Scalable Data Acquisition System for Long-Range Monitoring of Photovoltaic Plants}
+
+% \corresp{Corresponding author: Dionizio Porfírio de Assis (e-mail: dionisioassis80@gmail.com).}
+
+
+
+\begin{abstract}
+
+\textcolor{red}{comentário: 2.5}
+
+\textcolor{red}{
+The lack of scalable and economically viable photovoltaic (PV) monitoring systems, especially in remote locations or areas with limited infrastructure, hampers performance monitoring and the implementation of preventive maintenance strategies. To address this issue, this research develops a real-time PV monitoring system using ESP32 microcontrollers equipped with Long-Range (LoRa) modules and precision sensors for the collection and transmission of environmental and operational data. The monitored variables include PV module and ambient temperature, solar irradiance, relative humidity, and wind speed. The system is capable of transmitting data over long distances, storing it on a ThingSpeak IoT platform, enabling real-time analysis. The proposed solution facilitates anomaly detection and maintenance optimization, offering a robust and cost-effective approach, ideal for applications in remote areas or locations with limited infrastructure. Additionally, the stored data enables detailed studies by combining operational and environmental information.
+}
+\end{abstract}
+
+
+
+
+
+% \begin{abstract}
+% The lack of scalable and economically viable monitoring systems in photovoltaic (PV) plants, especially in remote locations or with limited infrastructure, makes performance monitoring and preventive maintenance difficult. Due to the problem presented, this paper presents the development of a solution with the development of a real-time monitoring system for PV plants, using ESP32 microcontrollers equipped with Long-Range (LoRa) modules and precision sensors for the collection and transmission of environmental and operational data. This manuscript presents the development and implementation of a monitoring system for PV plants utilizing Long-Range (LoRa) technology and an Internet of Things (IoT) platform for data visualization and management. The system is fully compatible with the standards established for PV monitoring, ensuring reliable and consistent performance. It tracks essential environmental and operational variables to optimize the efficiency of the photovoltaic modules. The results demonstrate high sensor accuracy, efficient data transmission, and enable real-time analysis, highlighting that the combination of LoRa and the IoT platform is a robust, scalable, and cost-effective solution for monitoring PV plants.
+% \end{abstract}
+
+\begin{keywords}
+Data Transmission, Energy Efficiency, Internet of Things, \textcolor{red}{Comentário 2.4: Long Range}, Photovoltaic Energy, Remote Monitoring, Sensor Networks.
+\end{keywords}
+
+\titlepgskip=-15pt
+
+\maketitle
+
+\section{Introduction}
+\label{sec:introduction}
+\PARstart{T}{he}  global transition to renewable energy sources is a critical response to climate change and the increasing demand for alternatives that reduce dependence on fossil fuels. In this context, photovoltaic (PV) power stands out as one of the most promising solutions, due to its ability to convert solar irradiance into clean and sustainable electricity. 
+
+\textcolor{red}{comentário: 2.13}
+
+\textcolor{red}{ PV plays a pivotal role in global energy efficiency strategies, not only through large-scale plants but also in decentralized applications such as portable charging devices and smart charging infrastructures for electric vehicles. Recent studies have explored the technoeconomic feasibility and energy dynamics of PV powered systems, highlighting their potential for expanding clean energy access and improving energy management \cite{spmfpcd2023,smartcharging2023}. Nevertheless, PV performance optimization requires addressing challenges such as dust accumulation and the variability of environmental conditions \cite{dustsurvey2023,optimizationreview2023}. These issues underscore the importance of real-time monitoring and intelligent control as key enablers for the effective PV integration into the grid. By enhancing data-driven decision-making, such monitoring systems support maintenance, efficiency, and long-term sustainability.
+}
+However, maximizing the efficiency and profitability of PV plants requires robust monitoring strategies that enable real-time analysis of both operational and environmental conditions. 
+
+Internet of Things (IoT)-based monitoring solutions have expanded the possibilities for data collection and transmission from PV systems, facilitating early fault detection and the implementation of predictive maintenance techniques. While communication technologies such as Wi-Fi are commonly used in small-scale systems, their limited range makes them less suitable for large-scale plants or installations in remote areas \cite{kalay2022systematic}. In this scenario, Long Range (LoRa) technology emerges as an efficient alternative, enabling long-distance data transmission with low energy consumption \cite{ansari2021review}.
+
+
+
+\textcolor{blue}{
+A comparative analysis of wireless communication technologies commonly applied in IoT-based monitoring systems, including LoRaWAN, ZigBee, NB-IoT, and LTE-M, is shown in Table~\ref{tab:comparison} Critical aspects such as modulation type, communication range, data rate, energy consumption, and estimated cost are considered. LoRaWAN stands out by combining long-range transmission (up to 15 km in rural areas) with very low power consumption, making it especially advantageous for large-scale or remote PV plants installations with limited infrastructure. While NB-IoT and LTE-M offer higher data rates and carrier-grade reliability, they generally require subscription-based network access and exhibit higher energy demands. ZigBee, in contrast, is cost-effective and energy-efficient but limited in range, restricting its applicability in outdoor or widely distributed systems. These trade-offs reflect the underlying design goals of each technology and are consistent with findings reported in the literature on low-power wide-area networks (LPWAN) and wireless IoT communication \cite{raza2017overview, centenaro2016long, mekki2019comparative, ieee802154, zigbee2024spec, lora2021covid, maldonado2021}.
+}
+
+
+
+
+\begin{table*}[htbp]
+\caption{\textcolor{blue}{Comentários: 1.1, 1.3, 4.2, 4.4} Comparison Between Wireless Communication Technologies for IoT (Adapted from \cite{ansari2021review, ieee802154, maldonado2021})}
+\label{tab:comparison}
+
+\begin{tabular}{p{85pt} p{90pt} p{90pt} p{90pt} p{90pt}}
+\toprule
+\textbf{Feature} & 
+\textbf{LoRaWAN} & 
+\textbf{ZigBee} & 
+\textbf{NB-IoT} & 
+\textbf{LTE-M} \\
+\toprule
+Modulation & 
+SS Chirp & 
+DSSS, O-QPSK & 
+OFDMA & 
+SC-FDMA \\
+
+Rx Bandwidth & 
+125–500 kHz & 
+2 MHz & 
+200 kHz & 
+1.4 MHz \\
+
+Data Rate & 
+290 bps–50 kbps & 
+20–250 kbps & 
+\textasciitilde20 kbps & 
+300 kbps–1 Mbps \\
+
+Max. Msgs/Day & 
+Unlimited & 
+Limited & 
+Unlimited & 
+Unlimited \\
+
+Max Output Power & 
+20 dBm & 
+0–20 dBm & 
+20 dBm & 
+23 dBm \\
+
+Link Budget & 
+154 dB & 
+\textasciitilde105 dB & 
+150 dB & 
+146 dB \\
+
+Typical Current Draw & 
+$0.2~\mu\text{A}$ to $120~\text{mA}$ & 
+$1~\mu\text{A}$ to $38~\text{mA}$ & 
+$3~\mu\text{A}$ to $250~\text{mA}$ & 
+$5~\mu\text{A}$ to $250~\text{mA}$ \\
+
+Power Efficiency & 
+Very High & 
+High & 
+Medium High & 
+Medium \\
+
+Interference Immunity & 
+Very High & 
+Medium & 
+Low & 
+Medium \\
+
+Coexistence & 
+Yes & 
+Yes & 
+Yes & 
+Yes \\
+
+Security & 
+Yes & 
+Yes & 
+Yes & 
+Yes \\
+
+Mobility / Localization & 
+Yes & 
+Limited mobility, Loc & 
+Limited mobility, No Loc & 
+Yes, optional GPS \\
+
+Typical Range & 
+Up to 15 km (rural), 2–5 km (urban) & 
+10–100 m (indoor), up to 300 m (outdoor) & 
+1–10 km (depending on coverage) & 
+1–10 km (depending on coverage) \\
+
+Estimated Cost & 
+Low (affordable modules, private networks) & 
+Very Low (cheap modules) & 
+Medium (USD \$5–10, requires carrier) & 
+Medium-High (USD \$10–20, requires carrier) \\
+
+Latency & 
+1–10 s & 
+20–30 ms & 
+1.6–10 s & 
+50–100 ms \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\textcolor{blue}{
+The relevance of developing autonomous and intelligent monitoring systems for PV applications is focused on \cite{aghaei2024}, highlighting the role of advanced technologies such as artificial intelligence (AI), machine learning (ML), deep learning (DL), internet of things (IoT), unmanned aerial vehicles (UAV), and big data analytics (BDA) in increasing PV efficiency and reliability of PV systems; additional aspects are: the transition from traditional monitoring methods to autonomous fault diagnosis, as well as the key implementation challenges, such as data management and computational requirements, that must be addressed to achieve scalable and reliable systems.
+}
+
+Our paper presents the development of a monitoring system for PV plants, utilizing ESP32 microcontrollers equipped with LoRa modules and precision sensors for the collection and transmission of environmental and operational data. The monitored variables include PV module and ambient temperature, solar irradiance, relative humidity, and wind speed. The system can transmit data over long distances, reaching 980 meters,  and stores it on the ThingSpeak IoT platform, enabling real-time analysis. The proposed solution facilitates anomaly detection and maintenance optimization and provides a robust and cost-effective approach, ideal for applications in remote areas or locations with limited infrastructure. Additionally, the stored data allows for detailed studies by combining operational and environmental information.
+
+The paper main goal is the integration of IoT and LoRa technologies, which have been underexplored in PV plant monitoring, especially using low-cost tools compatible with the standards established by the IEC 61724 norm for PV monitoring \cite{IEC61724}. The proposed system offers a scalable, non-invasive, and efficient solution for real-time management and analysis of PV plant performance. Moreover, it contributes to the expanded applicability of long-range communication networks in the renewable energy sector \cite{de2017monitoring,ansari2021review}.
+
+\textcolor{red}{Comentário: 2.10}
+
+\textcolor{red}{
+Several recent studies have explored the use of wireless technologies and IoT platforms for for PV monitoring \cite{dupont2018internet, pereira2019iot, liang2020performance, araripe2024monitoramento}. While these works have demonstrated the feasibility of real-time data acquisition and transmission using microcontrollers and sensors, they often rely on short-range communication protocols (e.g., Wi-Fi or ZigBee) and higher-cost hardware configurations, limiting their scalability in large-scale or remote PV installations. Additionally, many solutions lack integration with cloud platforms for real-time analysis or fail to meet  IEC 61724 standards, particularly in terms of measurement accuracy and data availability.
+}
+\textcolor{red}{2.7, 2.8 e 2.9}
+\textcolor{red}{
+In such context, our paper main contribution is the development and implementation of a low-cost, scalable, and energy- efficient PV monitoring system using ESP32 microcontrollers with integrated LoRa communication and a set of calibrated precision sensors. The motivation lies in the pressing need for accessible and autonomous monitoring solutions in remote or infrastructure-constrained environments, where commercial data loggers are often economically unfeasible. Hence, proposed system offers a practical and robust architecture capable of transmitting and analyzing operational and environmental data in real-time, with strong potential}.
+
+\textcolor{red}{Comentário: 2.8 e 3.1 e 4.1}
+
+\textcolor{magenta}{ The innovations include: (1) use of point-to-point LoRa communication without the need of gateways or network servers, which significantly reduces system complexity, cost, and energy consumption; (2) a modular and energy-efficient hardware architecture based on low-power components and PV power supply, enabling long-term operation in remote areas; (3) seamless integration with an IoT platform for real-time data visualization and performance analysis; and (4) an experimental assessment of LoRa transmission performance under real deployment conditions. These contributions differentiate the proposed solution from many previous studies that rely on proprietary infrastructures or centralized network components.} \textcolor{red}{
+By addressing limitations related to range, cost, and integration, our research advances the current state of the art and contributes to the expansion of intelligent monitoring infrastructures in the renewable energy sector.
+}
+
+\textcolor{blue}{Comentário: 3.3}
+
+\textcolor{blue}{
+In practical operation, the continuous database of environmental and performance metrics enables PV plant owners to make data-driven decisions on maintenance and energy management. For example, trends in module temperature and irradiance support proactive scheduling of panel cleaning and inspection, reducing soiling losses; analysis of power output versus expected irradiance allows real-time identification of efficiency drops, signaling the need for component replacement or fault investigation; and the full measurement history feeds predictive models for power-point optimization and generation forecasting, improving financial planning and grid integration. Beyond these applications, our laboratory members also leverage the dataset in ongoing research, further amplifying its scientific and practical value. These gains, such as predictive maintenance, early anomaly detection, generation forecasting, and expanded research possibilities, translate into reduced operational costs and improved system reliability.
+}
+
+
+
+The rest of this article is organized as follows. Section~\ref{sec:stat} provides a presentation of the state of the art on LoRa based PV monitoring systems. The methodology for development and implementation of the proposed monitoring system is detailed in Section~\ref{sec:met}. Section~\ref{sec:resul} presents an analysis of the  system in terms of data transmission and data quality. Finally, Section~\ref{sec:conc} concludes this article.
+
+
+\section{ State of the Art}
+\label{sec:stat}
+The search for efficient solutions for PV system monitoring and the integration of IoT nodes has generated a vast field of study and technological development. The architecture of a PV monitoring system can be divided into three main layers: the data acquisition layer, which involves collecting information via sensors; the data processing layer, which includes the hardware and operating system responsible for interpreting the signals received from the sensors; and the data visualization and/or storage layer, where the data is organized and visually presented \cite{ansari2021review}. 
+
+The three layers of a monitoring system —acquisition, processing, and visualization/storage— are interconnected through transmission systems, which can be either a wired or wireless technology. The solutions found in the literature range from Wi-Fi networks \cite{dupont2018internet,pereira2019iot} to long-distance communication technologies. Among these, LoRa technology stands out as one of the most promising alternatives, offering long-range wireless communication with low power consumption \cite{hamed2024solar}. Liang et al. \cite{liang2020performance} compare common wireless communication methods and demonstrate that LoRa offers the longest transmission range, with lower data rates and power consumption, outperforming technologies such as Wi-Fi, LR-WPAN, and Bluetooth. In the present paper, we focus on LoRa technology, detailing the main studies of PV monitoring that adopt this approach, with an emphasis on the devices and parameters employed.
+
+\textcolor{blue}{Cometário 1.4}
+\textcolor{blue}{
+Advanced optimization techniques for improving PV array performance under adverse conditions are investigated in \cite{aljafari2024}; a novel approach called Gorilla Troop Reconfiguration with Power Line Communication (GTR-PLC) is proposed, combining a bio-inspired reconfiguration algorithm, based on the collective behavior of gorilla groups, with power line communication (PLC) for real-time monitoring. This method effectively mitigates mismatch losses caused by partial shading, achieving power extraction efficiencies of up to 99.8\%, while maintaining a simple and low-cost hardware structure.
+}
+
+
+The acquisition layer consists of the hardware used to measure the variables being monitored. A summary of the key metrics tracked by LoRa-based PV monitoring systems is provided in Table \ref{tab:variaveis}, enabling a direct comparison  between the different approaches and highlighting the most relevant variables. The most commonly monitored variables are PV module voltage ($V_\text{PV}$), current ($I_\text{PV}$), and operating temperature ($T_\text{PV}$), all of which are directly related to the performance of the PV modules. Followed by environmental variables such as ambient temperature ($T_\text{amb}$), solar irradiance ($I_\text{irad}$), relative air humidity ($H_\text{um}$), and velocity of the wind ($V_\text{wind}$).
+
+\begin{table}[b!]
+\caption{\label{tab:variaveis}Monitored variables in data acquisition systems for photovoltaic systems}
+\centering
+\begin{tabular}{lp{.3cm}p{.3cm}p{.3cm}p{.3cm}p{.3cm}p{.3cm}p{.3cm}l} 
+\hline
+\hline
+Ref.&	$T_\text{PV}$	&	$V_\text{PV}$	&	$I_\text{PV}$	&	$I_\text{rad}$ &	$T_\text{amb}$ &	$V_\text{wind}$ &	$H_\text{um}$ &	Other	\\
+
+
+\hline
+
+\cite{15}	&		&	\checkmark&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark	&	$D_{wind}$$, V_\text{ibration}$	\\
+
+\cite{8}	&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark$^*$	&	\checkmark	&		&	\checkmark	& $_\text{Atmospheric pressure}$	\\
+
+\cite{26}	&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark	&		&	\checkmark	& -	\\
+
+\cite{9}	&		&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark	&		&	\checkmark	&	$V_\text{b}$, $I_\text{b}$, \newline $V_\text{c}$, $I_\text{c}$	\\
+
+\cite{25}	&		&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark	&		&	\checkmark	&	$_\text{PV module angle}$	\\
+
+\cite{7}	&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark	&		&		&	- \\
+
+\cite{11}	&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark	&	\checkmark	&		&		&	-	\\
+
+\cite{17}	&		&	\checkmark	&	\checkmark	&	\checkmark$^*$	&	\checkmark	&		&	\checkmark	&	-	\\
+
+\cite{22}	&	\checkmark	&	\checkmark	&	\checkmark	&		&		&		&	\checkmark	&	-	\\
+
+\cite{13}	&		&	\checkmark	&	\checkmark	&		&	\checkmark	&		&		&	-	\\
+
+\cite{4}	&	\checkmark	&		&		&		&	\checkmark	&		&		&	-	\\
+
+\cite{20}	&		&	\checkmark	&	\checkmark	&		&		&		&		&	$V_\text{i}$, $I_\text{i}$	\\
+
+\cite{12}	&		&	\checkmark	&	\checkmark	&		&		&		&		&	$_\text{Sun position}$	\\
+
+\cite{2}	&		&	\checkmark	&	\checkmark	&		&		&		&		&	-	\\
+
+\cite{5}	&		&	\checkmark	&	\checkmark	&		&		&		&		&	-	\\
+
+\cite{27}	&		&	\checkmark	&	\checkmark	&		&		&		&		&	-	\\
+
+\cite{28}	&		&	\checkmark	&	\checkmark	&		&		&		&		&	-	\\
+
+\cite{29}	&		&	\checkmark	&	\checkmark	&		&		&		&		&	-	\\
+
+\cite{16}	&		&	\checkmark	&	\checkmark	&		&		&		&		&	-	\\
+
+\cite{24}	&		&	\checkmark	&	\checkmark	&		&		&		&		&	-	\\
+
+\cite{23}	&		&	\checkmark	&		&		&		&		&		&	-	\\
+
+\cite{3}	&	\checkmark	&		&		&		&		&		&		&	-	\\
+
+\cite{1}	&	\checkmark	&		&		&		&		&		&		&	-	\\
+\hline
+\hline
+\multicolumn{9}{p{8cm}}{$^*$Based on light intensity measurement.}\\
+
+\multicolumn{9}{p{8cm}}{Nomenclature: Wind\,direction ($D_\text{wind}$), voltage (V), and current (I).}\\
+
+\multicolumn{9}{p{8cm}}{Subscripts: battery\,($\text{b}$), battery\,charging\,($\text{c}$), and inverter ($\text{i}$).}
+\end{tabular}
+	
+\end{table}
+
+Regarding the processing layer, different microcontrollers are used to interpret the sensor signals, the most frequently used are shown in Fig.~\ref{fig:grafico1}. Most studies use Arduino \cite{2,4,13,17,27,29}, or a combination of Arduino as the endpoint and Raspberry Pi as the gateway \cite{5,24,26,28}. More accessible alternatives, such as ESP32 \cite{8,20,22, 23} and STM32 \cite{11,15,16,25}, are also adopted. Although STM32 is effective, studies indicate that it can be slow in complex calculations, where ESP32 proves to be a more suitable alternative, particularly for data processing and accuracy \cite{16}.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.45\textwidth]{figure/img1.png}
+    \caption{Most used microcontrollers.}
+    \label{fig:grafico1}
+\end{figure}
+
+After processing, data can be stored and visualized with diverse methods and technologies. Storage solutions based on traditional databases, such as MySQL \cite{1,7,22} and MongoDB \cite{5}, efficiently centralize the data, while more advanced systems use InfluxDB to also manage time series data \cite{9,28}. Some studies chose to send data directly to the cloud, using services like TTN \cite{3,17}, Live Objects \cite{8}, and Blynk IoT \cite{24}, as well as SaaS platforms \cite{8}, and solutions like Ubidots and Node-RED for monitoring and analysis \cite{9}. In scenarios with limited connectivity, local storage in text files \cite{3,13} or SD cards \cite{12,16} provides effective alternatives. Hybrid approaches, combining local and remote storage, have also been reported, using, for example, SD cards for temporary storage, followed by data transfer to the cloud or databases \cite{12,16,22}. These strategies offer flexibility and adaptability to different connectivity scenarios.
+
+Data visualization strategies range from desktop and mobile interfaces, developed with Python, PHP, JavaScript, CSS, and HTML5 \cite{1,2,5,15}, to customized apps for real-time monitoring \cite{3,20,23,27}, or dashboards like Thinger.IO \cite{13} and Grafana \cite{9,28}. Local monitoring via displays integrated into the systems is also a common practice \cite{4,11,12,16,23,25,29}, providing instant visualization without the need for external connections. In summary, visualization strategies range from simple local solutions to more complex integrations with cloud platforms and databases, combined with web interfaces or mobile apps for efficient real-time monitoring \cite{1,3,5,7,9,17,24}.
+
+\section{Methodology}
+\label{sec:met}
+The development and implementation of the proposed PV monitoring system are based, in part, on previously described studies in \cite{pereira2019iot2} and \cite{araripe2024monitoramento}. However, this manuscript presents innovations in both the installation and hardware, as well as the adoption of LoRa technology. The implementation encompasses from the selection and configuration of sensors to the transmission and data analysis. The monitoring system was implemented in a PV plant located at the Laboratory of Alternative Energies of the Federal University of Ceará (LEA-UFC), consisting of 12 PV modules divided into two strings. The proposal involves monitoring the temperature at the center and edges of the modules, as well as the main environmental variables that directly impact the PV generation.
+
+The system's architecture is structured into three main layers: sensors, data transmission, and data storage/analysis.
+
+\begin{itemize}
+\item \textbf{Sensor Layer}: 
+\begin{itemize}
+    \item \textit{DS18B20 Temperature Sensors}: Measure the temperature of the PV modules.
+    \item \textit{Anemometer \#40C}: Records wind speed.
+    \item \textit{Pyranometer LP02}: Measures solar irradiance.
+    \item \textit{PT100 Ambient Temperature Sensor with Radiation Shield}: Monitors ambient temperature.
+    \item \textit{DHT11 Humidity Sensor}: Monitors relative humidity.
+\end{itemize}
+
+\item \textbf{Data Transmission Layer:} Use of an ESP32 microcontroller equipped with a LoRa module. The microcontroller is responsible for collecting the signal from the sensors and transmitting it via LoRa network to a central gateway.
+
+\item \textbf{Data Storage and Analysis Layer:} The data is stored and analyzed using the IoT platform ThingSpeak, which enables cloud storage, as well as real-time data visualization and analysis. 
+
+\end{itemize}
+
+The architecture adopted in the developed PV monitoring system is illustrated in Fig. \ref{fig:exemplo}.
+
+\begin{figure}[b]
+\centering
+\includegraphics[width=0.49\textwidth]{figure/img5.png}
+\caption{Monitoring system architecture}
+\label{fig:exemplo}
+\end{figure}
+
+\subsection{Implementation and Sensors}
+
+For the implementation of the system, the topology for sensor installation is initially defined. To measure the PV module operating temperature, sensors are positioned on the back side of each module, with a central sensor installed in each one. Additionally, the modules at the edges are equipped with supplementary sensors located at the upper and lower edges. The remaining sensors, responsible for measuring the meteorological conditions of the microclimate surrounding the PV plant, re placed in proximity to accurately capture the impact of environmental conditions. This proximity enables precise measurement of solar irradiance, wind speed, ambient temperature, and relative humidity, ensuring that the collected data accurately reflect the immediate environment around the PV modules, thereby guaranteeing the relevance and utility of the information obtained for performance analysis of the PV plant. 
+
+\paragraph{PV modules temperature}
+The performance of PV modules is significantly influenced by their operating temperature \cite{santos2024hybrid}. To accurately measure this variable, the digital temperature sensor DS18B20 is utilized. This sensor employs a one-wire communication interface and has a unique 64-bit identification address, allowing multiple sensors to be connected to a single pin. The data resolution can be adjusted between 9 and 12 bits, with an accuracy of ±0.5 °C in the range of -10°C to +85°C. Bus-powered, the sensor supports voltages from 3 to 5.5 V. In this project, a resolution of 12 bits was selected. After obtaining the address of each sensor, the devices were labeled and calibrated accordingly.
+
+Temperature measurement systems can be calibrated by immersion in a pure metal or water during the substance state-change point, at which the temperature remains constant \cite{bolton2003mechatronics}. The calibration of our temperature sensors is performed by immersing them in known temperature standards, specifically the solid-liquid (0 °C) and liquid-vapor (100 °C) equilibrium points of water. To validate the reference values, a mercury thermometer was used, with both the thermometer and the sensors to be calibrated placed in baths at the fixed temperatures. Those that exhibited a maximum variation of ±1°C were selected, as established by the IEC61724 standard.
+
+The DS18B20 sensors were affixed to the PV modules using high-temperature resistant silicone adhesive and thermally insulated with polyethylene foam. This insulation layer prevents interference from ambient temperature on the measurements. Additionally, thermal paste was applied at the contact interface between the sensor and the module to optimize thermal contact. Fig. \ref{fig:tuboSensor}  illustrates the installation of the DS18B20 sensors on the PV modules.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=2in]{figure/img7.png}
+    \caption{Temperature sensor installation schematic}
+    \label{fig:tuboSensor}
+\end{figure}
+
+\paragraph{Solar Irradiance}
+
+For the global horizontal irradiance measurements, a LP02 pyranometer is employed, with a measurement range from 0 W/m² to 2000 W/m² and a spectral range from 305 nm to 2800 nm. The sensor features a sensitivity of 18.56 µV/W/m² and operates within a temperature range of -40°C to 80°C. Due to the pyranometer's low sensitivity, it is necessary to condition the output signal, using an amplifier circuit with a gain of 101 times, for the ESP32.
+%
+An important detail to note is that the amplifier's output is 1.5 V lower than the input voltage. Therefore, when using a 5 V power supply, the maximum output is limited to 3.5 V. The maximum irradiance measured by the pyranometer of 2000 W/m² corresponds to a maximum output voltage of 3.712 V after amplification, which exceeds the ESP32’s maximum input voltage of 3.3 V. However, this maximum irradiance is not reached in the region under study, where irradiance rarely exceeds 1200 W/m², resulting in a reliable maximum reading of 1778 W/m².
+
+
+\paragraph{Wind Speed}
+
+Wind speed directly impacts the  PV modules' performance, working as a natural cooling mechanism for the PV cells \cite{neto2021the}. To monitor this variable, a cup anemometer model \#40C is utilized, measures wind speeds ranging from 1 m/s to 96 m/s, with a scale factor of 0.765 m/s/Hz and an offset of 0.35 m/s.
+
+This anemometer is an analog sensor that generates a low-level sinusoidal waveform output, where the frequency is proportional to the wind speed. The output signal's frequency range spans from 0 Hz to 125 Hz, and the sensor operates within a temperature range of -55°C to 60°C. Unlike digital sensors, which provide straightforward and direct measurements, analog sensors require the development of an algorithm to calculate the frequency of the received sinusoidal wave, which is then used to determine the (\(V_{\text{wind}}\)),  as shown in Eq. \ref{eq:vento}.
+
+\begin{equation}
+    V_{\text{wind}} = 0.765 \cdot f + 0.35
+    \label{eq:vento}
+\end{equation}
+
+Here, \(f\) represents the frequency of the anemometer, obtained via programming on the ESP32, while  \(0.765\)  is the scale factor and \(0.35\) is the offset, both specified in the anemometer's datasheet \cite{NRGSystems2019}.
+%
+
+
+\paragraph{Ambient Temperature}
+
+For ambient temperature data collection, a PT100 sensor was utilized, equipped with a radiation shield. The radiation shield ensures the PT100 effectively measures ambient temperature by allowing the sensor to achieve thermal equilibrium with the environment without solar irradiation influence. The PT100 employed is configured with a three-wire output, which compensates for electrical losses associated with the resistance of the connecting cables, thereby enhancing measurement accuracy \cite{OmegaEngineering2015}. A MAX31865 module, specifically designed for RTD (Resistance Temperature Detector) PT100 sensors, is employed to connect the PT100 to the microcontroller \cite{MaximIntegrated2023}. The module features an SPI interface, enabling efficient connection to the ESP32. This configuration allows the ESP32 to request temperature data simply and efficiently.
+
+\paragraph{Relative air humidity}
+
+For measuring the relative humidity of the air, a DHT11 sensor module is employed, capable of measuring relative humidity with an accuracy of ±5\%. The sensor features a three-pin connector for electrical operation, one pin for power supply (ranging from 3.3 V to 5 V), ground, and data transmission. As a digital sensor, it utilizes a straightforward communication protocol, allowing the measured values to be easily transmitted to the microcontroller requesting the data.
+
+\subsection{Data Reception and Transmission}
+
+For the proposed system, the Heltec ESP32 microcontroller was employed, and programmed using the Arduino IDE with specific libraries for each sensor type and LoRa communication. The programming scripts include routines for periodic data collection, initial processing, and transmission via LoRa.
+
+A point-to-point communication approach is implemented using two ESP32 devices with LoRa. In this setup, one microcontroller works as a receiver, while the other, connected to the sensors, serves as the transmitter. This topology enables direct data transmission between the devices without requiring complex network infrastructure such as gateways or network servers. The receiving device acts as a gateway, receiving data and transmitting it directly to the ThingSpeak application server via a Wi-Fi connection, thereby eliminating the need for additional infrastructure.
+
+The implementation of LoRa communication with ESP32 involved defining essential parameters and configurations for data collection and transmission. The first step was to select the appropriate frequency band. In Brazil, the Australian standard of 915 MHz is used, covering the range from 902 MHz to 928 MHz. However, there are licensed frequencies within this range. The range approved by Anatel (the Brazilian National Telecommunications Agency) for LoRa applications is from 902 to 907.5 MHz and from 915 to 928 MHz  \cite{pastorio20212}. Following  recommended frequency usage, the 915.125 MHz channel was chosen and configured on the microcontroller to ensure stable and efficient communication.
+
+
+After collecting the sensor signal, an information packet is constructed for data transmission. The transmission process begins with preparing the device to send data, followed by assembling a payload containing the sensor readings. Each value is encapsulated in fifty-three bytes, with a precision of two decimal places. The process concludes with finalizing the data packet and performing a check to ensure error-free transmission. Throughout the project, the default Spread Factor (SF) of SF7 is used to balance transmission rate and range, ensuring consistent performance.
+
+For reception, the second device is configured to receive on the same frequency as the transmitter, using the same SF, while checking for available packets in the buffer. If a packet is detected, it is read and stored in an array dedicated to sensor readings.
+
+To ensure reliable communication between the transmitter and receiver, a confirmation logic is implemented. After each transmission, the transmitter waits for a confirmation signal for one second. The receiver must confirm receipt by sending a return signal to the transmitter; otherwise, the transmitter retransmits the message, again awaiting confirmation. If ten consecutive attempts fail, the transmitter initiates a new data collection cycle to prevent prolonged interruptions in case of reception failure. This strategy has proven effective, significantly reducing data loss during the testing phase. The flowchart in Fig. \ref{fig:fluxograma} illustrates this communication logic.
+
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=3.5in]{figure/img13.png}
+    \caption{Receipt confirmation flowchart}
+    \label{fig:fluxograma}
+\end{figure}
+
+
+\subsection{Data Storage and Analysis}
+After reading and storing the data, the information is sent to the ThingSpeak server using the Hypertext Transfer Protocol (HTTP). Utilizing the tools available on this platform, the collected data is stored in the cloud and can be visualized through graphs and dashboards. This enables real-time monitoring and analysis of the environmental and operational variables.
+
+\subsection{Pseudocode and System Workflow}
+\label{sec:pseudocode}
+
+\textcolor{red}{comentário: 2.11}
+
+\textcolor{red}{
+The proposed monitoring system operates continuously, collecting data every minute from multiple sensors deployed in a PV plant. The system was run continuously for about one year, demonstrating high accuracy and minimal data loss. This section presents the core execution logic of the system using pseudocode, enabling reproducibility of the proposed approach. Table~\ref{tab:variables} defines the main variables used.
+}
+\begin{table}[h!]
+\caption{System execution flow}
+\label{tab:variables}
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+$T_{amb}$ & Ambient temperature (PT100) \\
+$T_{mod}$ & Module temperature (DS18B20) \\
+$H_{rel}$ & Relative humidity (DHT11) \\
+$I_{irr}$ & Solar irradiance (LP02 pyranometer) \\
+$V_{wind}$ & Wind speed (anemometer) \\
+$ACK$ & Acknowledgment from receiver (LoRa) \\
+$Payload$ & Data packet to be transmitted via LoRa \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{algorithm}
+\caption{ESP32 Monitoring Node – Sensor Acquisition and LoRa Transmission}
+\begin{algorithmic}[1]
+\STATE Initialize all sensors and communication interfaces
+\LOOP
+    \STATE Set sampling count $N \gets 55$
+    \FOR{$i = 1$ to $N$}
+        \STATE Read humidity: $H_{rel}[i] \gets$ DHT11
+        \STATE Read irradiance: $I_{irr}[i] \gets$ LP02
+        \STATE Read wind speed: $V_{wind}[i] \gets$ anemometer
+        \STATE Read ambient temperature: $T_{amb}[i]$
+    \ENDFOR
+    \STATE Calculate averages: $\bar{H}_{rel}, \bar{I}_{irr}, \bar{V}_{wind}, \bar{T}_{amb}$, 
+    \STATE Read temperature from 20 DS18B20 sensors
+    \STATE Construct $Payload$ with all values
+    \STATE Send $Payload$ via LoRa
+    \FOR{$j = 1$ to 10}
+        \IF{$ACK$ is received}
+            \STATE Exit retransmission loop
+        \ELSE
+            \STATE Retransmit $Payload$
+        \ENDIF
+    \ENDFOR
+    \STATE Wait delay before next cycle
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}
+\caption{LoRa Reception and Cloud Upload}
+\label{alg:gateway_logic}
+\begin{algorithmic}[1]
+\STATE Initialize LoRa receiver and Wi-Fi connection
+\LOOP
+    \IF{Payload received from ESP32}
+        \STATE Send $ACK$ via LoRa
+        \STATE Parse and validate $Payload$
+        \STATE Format data for ThingSpeak API
+        \STATE Upload to ThingSpeak via HTTP request
+    \ENDIF
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm}
+
+The two pseudocode algorithms presented above describe the complete system workflow: the first refers to the logic implemented in the ESP32-based monitoring node, while the second captures the behavior of the LoRa receiver. Together, they provide a clear overview of how data is collected, processed, transmitted, and acknowledged in the system, contributing to the reproducibility of the proposed approach.
+
+
+\section{Results and discussion}
+\label{sec:resul}
+
+
+The PV monitoring system using LoRa technology was implemented in the PV plant named LEA2, located at LEA-UFC, as shown in Fig. \ref{fig:modulosLEA}. The system operates in a continuous regime, with data collection performed every minute. The integration with the ThingSpeak platform enabled real-time data visualization, facilitating graphical analysis and the identification of patterns or anomalies in the plant's performance. The system has proven to be capable of achieving its objectives, providing solar irradiance data, wind speed, relative humidity, ambient temperature, and center and edge temperatures of the PV modules with good accuracy and low data loss rate. Most data loss occurrences were due to fluctuations in the internet signal in LEA.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=3.5in]{figure/img10.png}
+    \caption{LEA-UFC PV modules}
+    \label{fig:modulosLEA}
+\end{figure}
+
+
+
+
+\subsection{Data Transmission Efficiency} The performance analysis of data transmission considered two main parameters: the data reception rate and the maximum range of stable communication. The system was configured to transmit data at one-minute intervals, and the data loss rate was determined by the ratio between the total number of minutes in a year from the system’s start of operation and the number of packets effectively received. Based on this calculation, the reception rate was 93.89\%. However, it was observed that many instances of data loss were due to the intermittent Wi-Fi connection in the laboratory rather than failures in the transmission system itself, highlighting the robustness of the system in point-to-point communication.
+
+Regarding the system's range, stable communication was achieved at a distance of over 800 meters, even with multiple obstacles and without a direct line of sight between the transmitter and receiver. The test was conducted in an environment with dense vegetation and some buildings along the path. Fig. \ref{fig:mapaLEA} illustrates the location of the transmitter and receiver at the maximum communication distance, reaching 841 meters. As observed, the path is characterized by trees and buildings that obstructed the direct line of sight between the devices, demonstrating the LoRa system’s signal penetration capability in this scenario.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=3.5in]{figure/img9.png}
+    \caption{Location of LoRa transmitter and remote point with receiver.}    
+    \label{fig:mapaLEA}
+\end{figure}
+
+
+\subsection{Calibration and Performance of Sensors}  
+All sensors used in the proposed monitoring system were previously calibrated and tested. The calibration of the pyranometer was carried out by the manufacturer, as specified in the certificate of conformity.  
+
+
+To validate the accuracy of the data, a PL-110SM irradiance meter from Voltcraft® was used to compare the values provided by the proposed system. The meter was positioned next to the system's pyranometer, with the same orientation and inclination. The manual meter displays real-time data without storing it, so the results were recorded on video for 52 minutes, allowing data extraction every second. During this period, 3,110 data points were collected, and an average irradiance value was calculated every minute for both the manual meter and the proposed system. The comparison between the data showed a high correlation, with an average error of 4.06\%, which is within the margin established by the international PV monitoring standard.
+
+For the temperature sensors, the following calibration procedure was adopted: the sensors were immersed in melting ice water, which has a temperature of 0°C. Then, the temperature readings from all sensors were collected. Any sensor that showed a variation greater than ±1°C from zero was discarded, as the standard allows for a maximum tolerance of 1°C.
+
+The calibration of the ambient temperature sensor was performed by direct comparison with a reference sensor placed nearby, ensuring that both measured the temperature of the same environment. The results showed agreement in the measurements obtained, demonstrating that the ambient temperature sensor was also properly calibrated.
+
+
+The wind speed sensor was factory calibrated. To ensure the accuracy of the system in identifying the frequency of the sinusoidal wave, a sinusoidal waveform generator with a known frequency was used. The frequency identification results showed an average error of 3.30\% within the range of 0.7 Hz to 13 Hz, corresponding to wind speeds from 0 to 10.3 m/s.
+
+The collected data were consistent and within the expected range for each type of sensor. The temperature sensors (DS18B20), solar irradiance sensor (LP02), and wind speed sensor exhibited readings very close to those of the reference equipment, with deviations within acceptable ranges, indicating their accuracy.
+
+\subsection{Data Analysis and Real-Time Monitoring}
+
+The integration with the IoT platform enabled real-time visualization and analysis of the collected data. Graphs of temperature, irradiance, humidity, and wind speed were generated, providing insights into the PV plant performance.
+
+% figure here
+
+Initially, the influence of solar irradiance and ambient temperature on the temperature of the modules was observed. Figure~\ref{fig:temp_irradiancia} shows the behavior of these variables. It was noted that the temperature of the PV modules closely follows the rising and falling variations in solar irradiance. This behavior is directly influenced by the presence of clouds, which cause oscillations in the received radiation. When irradiance increases due to the absence of cloud cover, the module temperature rises rapidly as a result of direct radiation absorption. Similarly, a decrease in irradiance, caused by passing clouds, leads to a reduction in module temperature.
+
+Additionally, ambient temperature also influences the module temperature, albeit to a lesser extent. During periods of high irradiance, ambient temperature can intensify the thermal increase in the modules, highlighting the combined effects of environmental factors on the thermal behavior of PV systems.
+
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=3.5in]{figure/img11.png}
+    \caption{Influence of irradiance and ambient temperature on the temperature of PV modules}
+    \label{fig:temp_irradiancia}
+\end{figure}
+
+
+The correlations between the thermal behavior of PV modules, relative humidity, and wind speed were analyzed, as presented in Figure \ref{fig:umidade_vento}. Relative humidity exhibited a negative correlation with the temperature of the PV modules, showing a similar but inverted curve. This behavior indicates that an increase in humidity contributes to thermal dissipation, resulting in a reduction of the module temperature.
+
+Regarding wind speed, no significant correlation with PV module temperature was observed in this experiment. Although natural ventilation is recognized as a cooling factor, this influence could not be detected due to the laboratory's location, which is surrounded by trees and buildings, reducing wind speed. Moreover, data collection occurred during a season characterized by low wind conditions in the region, limiting the variability of this parameter.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=3.5in]{figure/img12.png}
+    \caption{Influence of relative air humidity and ambient wind speed on the temperature of PV modules}
+    \label{fig:umidade_vento}
+\end{figure}
+
+
+These analyses of the correlations between the temperature of the PV module and environmental variables provide valuable information on the monitored data, enabling a deeper understanding of the PV performance and thermal behavior.
+
+\subsection{Cost Analysis and Economic Feasibility}
+
+One of the main advantages of the proposed system is its economic viability, especially for applications in remote areas or small-scale projects with budgetary restrictions. Table ~\ref{tab:cost_analysis} presents the estimated costs for assembling a complete node of the developed monitoring system, based on average values practiced on the national market in 2025.
+
+\begin{table}[htbp]
+\caption{Estimated Cost of the Proposed Monitoring Node}
+\label{tab:cost_analysis}
+\centering
+\begin{tabular}{l r r}
+\toprule
+\textbf{Component} & \textbf{Amount} & \textbf{Custo (US\$)}\\
+\midrule
+ESP32 microcontroller (Heltec) & 2 & 77.90 \\
+DS18B20 temperature sensors & 20 & 70.82 \\
+DHT11 humidity sensor & 1 & 1.77 \\
+LP02 Pyranometer & 1 & 1,010.00 \\
+Anemometer \#40C & 1 & 300.96 \\
+Cabling, connectors, and PCB &  - & 35.41 \\
+Power supply and casing & 2 & 8.85 \\
+\midrule
+\textbf{Total} & \textbf{~US\$1,505.71} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textcolor{blue}{
+Commercial data loggers vary in price, with systems designed specifically for measuring meteorological variables typically ranging from USD \$2,035.00 to over USD \$4,780.03, depending on the features and sensors included. For PV monitoring systems, costs can range from USD \$265.56 to over USD \$1770, reflecting variations based on functionality, communication systems and PV plant size. It is important to note that these values were obtained from research conducted in the Brazilian market.
+}
+
+\textcolor{blue}{Comentário 1.6}
+
+\textcolor{blue}{
+This substantial cost difference highlights a key advantage of the proposed system: while commercial solutions often integrate certified interfaces and advanced features, the developed monitoring system offers a customizable, scalable, and cost-effective alternative. Such characteristics are particularly attractive for applications in resource-constrained environments, allowing broader deployment and improved data collection without the financial burden associated with commercial systems.
+}
+
+\textcolor{red}{comentário: 2.12}
+
+\textcolor{red}{
+In comparison with conventional PV monitoring solutions, that employ short-range technologies such as ZigBee or Wi-Fi, or more costly cellular-based methods, like NB-IoT and LTE-M, the proposed system presents significant advantages. According to Table~\ref{tab:comparison}, LoRa provides extended transmission distances with much lower power consumption; moreover, the estimated system cost (Table~\ref{tab:cost_analysis}) is considerably lower than that of commercial data loggers, while offering comparable accuracy and real-time capabilities. These results highlight the practicality and economic feasibility of the proposed solution, especially for decentralized or infrastructure-constrained scenarios.
+}
+
+
+
+
+
+\subsection{Comparative Analysis with Related Works}
+
+\textcolor{magenta}{
+Compared to the 29 PV monitoring systems analyzed in the literature~\cite{1,2,3,4,5,7,8,9,11,12,13,15,16,17,montero2016,almeida2018,20,22,23,24,25,26,27,28,29,Dupont2020,rodrigues2020,Cheddadi2020,Rodrigues2020}, the proposed solution demonstrates significant advances in data throughput, communication efficiency, and system architecture. Although LoRa-based systems in the literature typically monitor an average of 4.3 variables per node, primarily voltage, current, and ambient temperature, our system captures 21 distinct parameters, including 16 individual PV module temperatures, ambient temperature, relative humidity, wind speed, and solar irradiance. This represents almost five times more data density, allowing more granular thermal analysis throughout the PV plant.}
+
+\textcolor{magenta}{
+In terms of communication performance, the implemented point-to-point architecture achieved a stable transmission range of 840 meters in a suburban environment. This result aligns with the 500 to 1300 meters range reported in similar LoRa-based systems, even in the absence of dedicated gateways or network servers. Although 61\% of the reviewed LoRa systems rely on external gateways and 43\% rely on cloud-based network servers, our gateway-free and serverless design reduces both cost and complexity without compromising reliability or performance.}
+
+\textcolor{magenta}{
+Moreover, the use of a single ESP32 microcontroller to handle all sensing and communication tasks contrasts with the prevalent use of Arduino-based architectures (48\% of LoRa systems), which often require additional hardware to support multiple sensors. This level of integration improves both energy and processing efficiency, while simplifying deployment. Therefore, the proposed combination of high-resolution monitoring, extended communication range, and minimal hardware requirements constitutes a scalable, robust, and cost-effective alternative to existing LoRa-based PV monitoring solutions.}
+
+
+\section{Lessons Learned}
+\textcolor{magenta}{comentário: 3.2, 3.4, 4.3}
+\textcolor{magenta}{
+The development and deployment of our PV monitoring system revealed several areas for improvement. LoRa operation suffered an occasional synchronization loss between the transmitter and the receiver, which was partially addressed by implementing an ACK-based retransmission mechanism with timeout and retry logic; however, further refinement of the timing parameters and recovery policies is needed. The stability of a wire bus with multiple DS18B20 sensors improved after reducing the pull-up resistor from 4.7 kΩ to 440 Ω, but this change increased GPIO (General Purpose Input/Output) load, highlighting the need for systematic evaluation of trade-offs as sensor count and cable lengths vary. Wi-Fi connectivity demonstrated satisfactory performance, with interruptions occurring primarily due to campus network maintenance or occasional power outages, reinforcing the importance of local buffering (e.g., SD card or internal flash) as an effective solution to preserve data continuity.
+}
+\textcolor{magenta}{
+Factors such as vegetation, structures, and line-of-sight influenced significantly LoRa rang, underscoring the necessity of documenting site characteristics and repeating tests across seasons. Finally, although ACK/retransmission improved reliability, the lack of native encryption or authentication in LoRa and potential vulnerabilities in upstream data paths call for lightweight cryptographic measures and secure transport protocols. These experiences guide future enhancements aimed at bolstering robustness, scalability, and maintainability.
+}
+
+
+
+\section{Conclusion}
+\label{sec:conc}
+
+The development and implementation of a monitoring system for PV plants using LoRa technology  and an IoT platform have proven to be effective and promising. This study demonstrated that the combination of sensors, ESP32 microcontrollers, and LoRa communication can provide a robust and cost-effective monitoring solution, essential for optimizing the PV performance and maintenance.
+
+The results show that LoRa technology is a viable solution for long-distance data transmission, especially in hard-to-reach environments with energy constraints. The data transmission success rate remained high, exceeding 93\%, even considering internet connection failures in the laboratory, which were external factors unrelated to LoRa usage. Additionally, even at distances greater than 800 m, the technology confirmed its suitability for remote monitoring applications.
+
+The integration with the IoT platform enabled real-time analysis of the collected data, providing insights into the PV plant’s performance  and facilitating the detection of anomalies and the implementation of predictive maintenance strategies. The ability to visualize correlations between environmental and operational variables contributed to a deeper understanding of the factors impacting the PV efficiency.
+
+The use of advanced communication and IoT technologies represents a significant advancement in PV plant monitoring. The developed system offers practical advantages such as low power consumption of components, allowing continuous monitoring in remote locations; scalability, as the system's modular architecture facilitates expansion to monitor large-scale PV plants; and real-time monitoring, enabling better failure response and energy production optimization.
+
+The proposed methodology provides a practical and efficient solution, contributing to the optimization of renewable energy production and the advancement of sustainable technologies. Continued research in this area could lead to even more innovative developments, strengthening the monitoring infrastructure of PV systems and promoting the broader adoption of clean energy sources.
+
+
+\section{Future Work}
+\label{sec:future}
+
+\textcolor{blue}{Comentário: 1.2}
+
+\textcolor{blue}{
+Although the developed monitoring system has shown effectiveness for the small-scale PV plant, a scalability assessment is crucial to ensure its application in large-scale PV parks. In larger systems, modular architecture and LoRa use can be expanded, allowing for the addition of more sensors and monitoring modules while maintaining data transmission efficiency and low energy consumption. Hence, future research can investigate the implementation of such systems in large-scale PV parks, considering the need for wider coverage and integration of multiple monitoring units.
+}
+
+\textcolor{blue}{Comentário: 1.5}
+
+
+\textcolor{blue}{
+Although the system employs point-to-point LoRa communication without a network server, cybersecurity and data integrity remain critical for reliable PV plant monitoring. In our implementation, LoRa protocol provides no native encryption; however, data packets are validated using checksum mechanisms to minimize transmission errors. Libraries such as LoRa.h allow for custom encryption at the application layer, and lightweight encryption schemes like AES-128 can be integrated in future developments. Additionally, authentication mechanisms and error correction techniques may be explored to further enhance data protection. The integration of secure communication protocols and evaluation of the system’s Quality of Service (QoS) under various operating conditions can also be investigated.
+}
+
+\section{ACKNOWLEDGMENT}
+
+The authors would like to thank the National Council for Scientific and Technological Development (CNPq), for providing a research scholarship for the third author, and the Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (FUNCAP), for supporting this research through grants and scholarships.
+
+
+\begin{thebibliography}{00}
+
+
+% 1
+\bibitem{spmfpcd2023}
+A. U. Rehman, I. G. M. Alblushi, H. M. Khalid, Z. Said, A. Iqbal, M. A. Rehman, and S. R. Memon, “A solar-powered multi-functional portable charging device (SPMFPCD) with Internet of Things (IoT)-based real-time monitoring: An innovative scheme for energy access and management,” \emph{Green Technol. Sustain.}, vol. 3, no. 1, p. 100134, 2025, doi: \url{10.1016/j.geits.2024.100134}.
+
+
+% 2
+\bibitem{smartcharging2023}
+A. U. Rehman, I. G. M. Alblushi, H. M. Khalid, Z. Said, A. Iqbal, M. A. Rehman, and S. R. Memon, “Technoeconomics and energy dynamics of a solar-powered smart charging infrastructure for electric vehicles with IoT-based advanced monitoring and RFID-based security,” \emph{Sustain. Energy Technol. Assess.}, vol. 61, p. 103486, 2024, doi: \url{10.1016/j.seta.2024.103486}.
+
+% 3
+\bibitem{optimizationreview2023}
+N. F. O. Al-Muhsen and F. B. I. Alnaimi, “Solar photovoltaic power optimization methods, challenges, and problems: A comprehensive review,” \emph{J. Cleaner Prod.}, vol. 284, p. 125465, 2021, doi: \url{10.1016/j.jclepro.2020.125465}.
+
+% 4
+\bibitem{dustsurvey2023}
+A. B. Ahmed, S. A. Kazmi, U. Ameer, and S. Shehzad, “Dust accumulation and aggregation on photovoltaic panels: An integrated survey on impacts, mathematical models, cleaning mechanisms, and possible sustainable solutions,” \emph{Solar Energy}, vol. 251, pp. 261–285, 2023, doi: \url{10.1016/j.solener.2022.10.038}.
+
+% 5
+\bibitem{kalay2022systematic}
+M. Ş. Kalay, B. Kılıç, and Ş. Sağlam, “Systematic review of the data acquisition and monitoring systems of photovoltaic panels and arrays,” \emph{Solar Energy}, vol. 244, pp. 47–64, 2022, doi: \url{10.1016/j.solener.2022.08.029}.
+
+% 6
+\bibitem{ansari2021review}
+S. Ansari, A. Ayob, M. S. H. Lipu, M. H. M. Saad, and A. Hussain, “A review of monitoring technologies for solar PV systems using data processing modules and transmission protocols: Progress, challenges and prospects,” \emph{Sustainability}, vol. 13, no. 15, p. 8120, 2021, doi: \url{10.3390/su13158120}.
+
+% 7
+\bibitem{raza2017overview}
+U. Raza, P. Kulkarni, and M. Sooriyabandara, “Low power wide area networks: An overview,” \emph{IEEE Commun. Surveys Tuts.}, vol. 19, no. 2, pp. 855–873, 2017, doi: \url{10.1109/COMST.2017.2652321}.
+
+% 8
+\bibitem{centenaro2016long}
+M. Centenaro, L. Vangelista, A. Zanella, and M. Zorzi, “Long-range communications in unlicensed bands: The rising stars in the IoT and smart city scenarios,” \emph{IEEE Wireless Commun.}, vol. 23, no. 5, pp. 60–67, 2016, doi: \url{10.1109/MWC.2016.7721740}.
+
+% 9
+\bibitem{mekki2019comparative}
+K. Mekki, E. Bajic, F. Chaxel, and F. Meyer, “A comparative study of LPWAN technologies for large-scale IoT deployment,” \emph{ICT Express}, vol. 5, no. 1, pp. 1–7, 2019, doi: \url{10.1016/j.icte.2018.12.005}.
+
+% 10
+\bibitem{ieee802154}
+IEEE, \emph{IEEE Standard for Low-Rate Wireless Networks}, IEEE Std 802.15.4-2020. 2020.
+
+% 11
+\bibitem{zigbee2024spec}
+Zigbee Alliance, \emph{Zigbee specification}, Zigbee Document 05-3474-21, Jan. 2017. [Online]. Available: \url{https://zigbeealliance.org/solution/zigbee}. Accessed: Jun. 2024.
+
+%12
+\bibitem{lora2021covid}
+J. A. R. Nunes and J. C. S. Matos, “LoRa and LoRaWAN technology for IoT applications in the COVID-19 pandemic,” \emph{IEEE Latin America Trans.}, vol. 19, no. 12, pp. 2096–2102, Dec. 2021, doi: \url{10.1109/latinc.2021.2102083}.
+
+% 13
+\bibitem{maldonado2021}
+J. Maldonado, J. M. Paredes-Parra, A. J. García-Sánchez, A. Mateo-Aroca, and Á. Molina-García, “NB-IoT and LTE-M towards massive MTC: Complete performance evaluation for 5G mMTC,” \emph{IEEE Commun. Mag.}, vol. 59, no. 3, pp. 24–30, Mar. 2021, doi: \url{10.1109/MCOM.001.2001102}.
+
+% 14
+\bibitem{aghaei2024}
+M. Aghaei et al., “Autonomous intelligent monitoring of photovoltaic systems: An in-depth multidisciplinary review,” \emph{Prog. Photovoltaics Res. Appl.}, vol. 33, Nov. 2024, doi: \url{10.1002/pip.3859}.
+
+% 15
+\bibitem{IEC61724}
+International Electrotechnical Commission, \emph{IEC 61724: Photovoltaic System Performance Monitoring – Guidelines for Measurement, Data Exchange and Analysis}, 2nd ed. Geneva, Switzerland: 2021.
+
+% 16
+\bibitem{de2017monitoring}
+M. de Lima Pereira and J. R. de Brito Sousa, “Monitoring systems used in photovoltaic microgeneration: A review,” \emph{IEEE Latin America Trans.}, vol. 15, no. 9, pp. 1671–1676, 2017, doi: \url{10.1109/TLA.2017.8015051}.
+
+% 17
+\bibitem{liang2020performance}
+R. Liang, L. Zhao, and P. Wang, “Performance evaluations of LoRa wireless communication in building environments,” \emph{Sensors}, vol. 20, no. 14, p. 3828, 2020, doi: \url{10.3390/s20143828}.
+
+% 18
+\bibitem{araripe2024monitoramento}
+A. T. C. Araripe, L. O. Santos, J. J. S. de Souza, C. A. Frate, and P. C. M. de Carvalho, “Monitoring of operating temperature in photovoltaic modules,” in \emph{Proc. Braz. Congr. Solar Energy (CBENS)}, 2024, doi: \url{10.59627/cbens.2024.2418}.
+
+% 19
+\bibitem{pereira2019iot}
+R. I. S. Pereira, S. C. S. Jucá, P. C. M. Carvalho, and C. P. Souza, “IoT network and sensor signal conditioning for meteorological data and photovoltaic module temperature monitoring,” \emph{IEEE Latin America Trans.}, vol. 17, no. 6, pp. 937–944, 2019, doi: \url{10.1109/TLA.2019.8896816}.
+
+% 20
+\bibitem{dupont2018internet}
+I. Dupont, R. I. S. Pereira, S. C. S. Jucá, and P. C. M. Carvalho, “Internet of things data acquisition system applied to photovoltaic water pumping,” \emph{IEEE Latin America Trans.}, vol. 16, no. 10, pp. 2547–2560, 2018, doi: \url{10.1109/TLA.2018.8795134}.
+
+% 21
+\bibitem{hamed2024solar}
+A. S. A. Hamed, I. S. Ismail, N. A. A. Latiff, N. A. A. Ali, A. H. Wahy, and N. F. Munajat, “Solar irradiance and temperature effects on signal transmission performance of LoRa network for a monitoring system on island,” \emph{J. Adv. Res. Appl. Sci. Eng. Technol.}, vol. 37, no. 2, pp. 25–35, 2024, doi: \url{10.37934/araset.37.2.2535}.
+
+% 22
+\bibitem{aljafari2024}
+B. Aljafari, P. R. Satpathy, S. B. Thanikanti, and S. R. K. Madeti, “A reliable GTR-PLC approach for power enhancement and online monitoring of solar PV arrays during partial shading,” \emph{Energy}, vol. 303, p. 131839, 2024, doi: \url{10.1016/j.energy.2024.131839}.
+
+% 23
+\bibitem{2}
+I. Mwammenywa, D. Petrov, P. Holle, and U. Hilleringmann, “LoRa transceiver for load monitoring and control system in microgrids,” in \emph{Proc. Int. Conf. Eng. Emerging Technol. (ICEET)}, 2022, pp. 1–5, doi: \url{10.1109/ICEET56468.2022.10007274}.
+
+% 24
+\bibitem{4}
+J.-D. Jeong, Y. Shin, and I.-W. Lee, “Long-range transmission of photovoltaic climate information through the LoRa radio,” in \emph{Proc. Int. Conf. Inf. Commun. Technol. Convergence (ICTC)}, 2018, pp. 956–959, doi: \url{10.1109/ICTC.2018.8539429}.
+
+% 25
+\bibitem{13}
+D. Setiabudi, D. W. Herdiyanto, A. Kurniawan, W. Muldayani, A. R. Chaidir, and G. A. Rahardi, “Design of wireless sensor network system using point-to-point and waiting protocol methods for solar panel monitoring,” in \emph{Proc. 2022 Int. Conf. Electr. Eng. Comput. Inf. Technol. (ICEECIT)}, 2022, pp. 232–240, doi: \url{10.1109/ICEECIT55908.2022.10030602}.
+
+% 26
+\bibitem{17}
+W. Al-Areeqi, S. Annathurai, T. Rahim, and M. Fauzi, “Smart energy meter based on a long-range wide-area network for a stand-alone photovoltaic system,” \emph{Expert Syst. Appl.}, vol. 197, p. 116703, Jul. 2022, doi: \url{10.1016/j.eswa.2022.116703}.
+
+% 27
+\bibitem{27}
+M. J. Mnati, S. J. Hammoodi, H. T. R. Altaie, S. Al-Youif, M. N. Ibrahim, and A. Van den Bossche, “Design and implementation of a low-cost photovoltaic monitoring system network based on LoRaWAN,” \emph{IOP Conf. Ser. Mater. Sci. Eng.}, vol. 745, no. 1, p. 012046, Mar. 2020, doi: \url{10.1088/1757-899X/745/1/012046}.
+
+
+% 28
+\bibitem{29}
+Z. E. Dallalbashi, S. Alhayalir, M. J. Mnati, and A. A. Alhayali, “Low-cost battery monitoring circuit for a photovoltaic system based on LoRa/LoRaWAN network,” \emph{Indonesian J. Electr. Eng. Comput. Sci.}, vol. 29, no. 2, pp. 669–677, 2023, doi: \url{10.11591/ijeecs.v29.i2.pp669-677}.
+
+
+% 29
+\bibitem{5}
+C.-S. Choi, J. Jin, I. Lee, and W.-K. Park, “LoRa based renewable energy monitoring system with open IoT platform,” in \emph{Proc. 2018 Int. Conf. ELINFOCOM}, 2018, pp. 1–2, doi: \url{10.23919/ELINFOCOM.2018.8330550}.
+
+% 30
+\bibitem{24}
+M. Shaban, I. B. Dhaou, M. F. Alsharekh, and M. Abdel-Akher, “Design of a partially grid-connected photovoltaic microgrid using IoT technology,” \emph{Appl. Sci.}, vol. 11, no. 24, p. 11651, Dec. 2021, doi: \url{10.3390/app112411651}.
+
+
+% 31
+\bibitem{26}
+J. M. Paredes-Parra, A. J. García-Sánchez, A. Mateo-Aroca, and Á. Molina-García, “An alternative Internet-of-Things solution based on LoRa for PV power plants: Data monitoring and management,” \emph{Energies}, vol. 12, no. 5, p. 881, May 2019, doi: \url{10.3390/en12050881}.
+
+% 32
+\bibitem{28}
+C. Ndukwe, M. T. Iqbal, and J. Khan, “Development of a low-cost LoRa-based SCADA system for monitoring and supervisory control of small renewable energy generation systems,” in \emph{Proc. 2020 11th IEEE Annu. Inf. Technol., Electron. Mobile Commun. Conf. (IEMCON)}, 2020, pp. 479–484, doi: \url{10.1109/IEMCON51383.2020.9284933}.
+
+% 33
+\bibitem{8}
+M. Oproiu, A. Neagu, P. A. Cotfas, D. T. Cotfas, C. Mușuroi, and M. Volmer, “LoRa wide-area network and live objects used in renewable energy monitoring,” in \emph{Proc. 2021 Int. Aegean Conf. Electr. Mach. Power Electron. (ACEMP) \& Int. Conf. Optim. Electr. Electron. Equip. (OPTIM)}, 2021, pp. 505–512, doi: \url{10.1109/OPTIM-ACEMP50812.2021.9590023}.
+
+
+% 34
+\bibitem{20}
+M. J. Mnati, A. Hasan, A. H. Ali, D. V. Bozalakov, and A. Van den Bossche, “Design and implementation of a smart monitoring and controlling system of three-phase photovoltaic inverter based on LoRa,” \emph{IOP Conf. Ser. Mater. Sci. Eng.}, vol. 518, no. 4, p. 042022, May 2019, doi: \url{10.1088/1757-899X/518/4/042022}.
+
+
+% 35
+\bibitem{22}
+M.-S. Kim, D.-H. Kim, H.-J. Kim, and K. Prabakar, “A novel strategy for monitoring a PV junction box based on LoRa in a 3 kW residential PV system,” \emph{Electronics}, vol. 11, no. 5, p. 709, May 2022, doi: \url{10.3390/electronics11050709}.
+
+% 36
+\bibitem{23}
+R. F. Chisab, M. T. Ali, M. J. Mnati, and A. Van den Bossche, “A modified smart controlling and monitoring scheme of three-phase photovoltaic inverter relying on LoRa technology,” \emph{IOP Conf. Ser. Mater. Sci. Eng.}, vol. 518, no. 5, p. 052005, May 2019, doi: \url{10.1088/1757-899X/518/5/052005}.
+
+% 37
+\bibitem{11}
+G. García-Valle, S. Colodrero, V. Cuadrat, G. Gutiérrez, S. Beneitez, and S. Martínez-Navas, “Design of a smart metering device with edge computing for monitoring silicon photovoltaic panels,” in \emph{Proc. 2022 IEEE 27th Int. Workshop Comput. Aided Model. Design Commun. Links Netw. (CAMAD)}, 2022, pp. 121–127, doi: \url{10.1109/CAMAD55695.2022.9966885}.
+
+% 38
+\bibitem{15}
+D. Wang, Q. Zhou, Y. Du, and H. Dong, “Research on distributed PV monitoring system based on ubiquitous power IoT architecture,” \emph{J. Phys. Conf. Ser.}, vol. 2166, no. 1, p. 012025, 2022, doi: \url{10.1088/1742-6596/2166/1/012025}.
+
+% 39
+\bibitem{16}
+Y. Nie, Y. Huang, W. Luo, and W. Zhou, “Design of an online monitoring system for photovoltaic power generation power quality based on STM32,” \emph{J. Phys. Conf. Ser.}, vol. 2418, no. 1, p. 012021, Feb. 2023, doi: \url{10.1088/1742-6596/2418/1/012021}.
+
+
+% 40
+\bibitem{25}
+L. Boulemzaoud, S. Latreche, and M. Khemliche, “Design and implementation of a long-range wireless data acquisition system for photovoltaic installation based on LoRa technology,” \emph{Eng. Technol. Appl. Sci. Res.}, vol. 12, no. 2, pp. 8473–8481, Apr. 2022, doi: \url{10.48084/etasr.4859}.
+
+% 41
+\bibitem{1}
+X. Hu, H.-S. Zhang, and Y. Wang, “Application research of LoRa technology in photovoltaic monitoring system,” in \emph{Proc. IEEE Int. Instrum. Meas. Technol. Conf. (I2MTC)}, 2020, doi: \url{10.1109/I2MTC43012.2020.9128670}.
+
+% 42
+\bibitem{7}
+J. E. Shuda, A. J. Rix, and M. J. Booysen, “Towards module-level performance and health monitoring of solar PV plants using LoRa wireless sensor networks,” in \emph{Proc. 2018 IEEE PES/IAS PowerAfrica}, 2018, pp. 172–177, doi: \url{10.1109/PowerAfrica.2018.8521179}.
+
+% 43
+\bibitem{9}
+M. S. Shaik, D. Shah, R. Chetty, and R. R. Marathe, “A LoRaWAN based open source IoT solution for monitoring rural electrification policy,” in \emph{Proc. 2020 Int. Conf. Commun. Syst. Netw. (COMSNETS)}, 2020, pp. 888–890, doi: \url{10.1109/COMSNETS48256.2020.9027490}.
+
+% 44
+\bibitem{3}
+M. Alagumeenaakshi, S. Umamaheswari, A. A. Mevis, S. Seetha, and G. Hema, “Monitoring and controlling of solar photovoltaic cells using LoRa technology,” in \emph{Proc. Int. Conf. Adv. Electr., Electron., Commun., Comput. Autom. (ICAECA)}, 2021, doi: \url{10.1109/ICAECA52838.2021.9675732}.
+
+
+% 45
+\bibitem{12}
+N. Kuttybay, S. Mekhilef, A. Saymbetov, M. Nurgaliyev, A. Meiirkhanov, G. Dosymbetova, and Z. Kopzhan, “An automated intelligent solar tracking control system with adaptive algorithm for different weather conditions,” in \emph{Proc. 2019 IEEE Int. Conf. Autom. Control Intell. Syst. (I2CACIS)}, 2019, pp. 315–319, doi: \url{10.1109/I2CACIS.2019.8825098}.
+
+% 46
+\bibitem{pereira2019iot2}
+R. I. S. Pereira, S. C. S. Jucá, and P. C. M. Carvalho, “IoT embedded systems network and sensor signal conditioning applied to decentralized photovoltaic plants,” \emph{Measurement}, vol. 142, pp. 195–212, 2019, doi: \url{10.1016/j.measurement.2019.04.085}.
+
+% 47
+\bibitem{santos2024hybrid}
+L. O. Santos, F. A. A. Souza, C. O. Carvalho Filho, P. C. M. Carvalho, T. AlSkaif, and R. I. S. Pereira, “Hybrid modeling for photovoltaic module operating temperature estimation,” \emph{IEEE J. Photovoltaics}, vol. 14, no. 3, pp. 488–496, 2024, doi: \url{10.1109/JPHOTOV.2024.3372328}.
+
+% 48
+\bibitem{bolton2003mechatronics}
+W. Bolton, \emph{Mechatronics: Electronic Control Systems in Mechanical and Electrical Engineering}. Pearson Education, 2003.
+
+% 49
+\bibitem{NRGSystems2019}
+NRG Systems, “NRG 40C anemometer.” [Online]. Available: \url{https://www.nrgsystems.com/products/met-sensors/detail/40c-anemometer}. Accessed: Apr. 30, 2021.
+
+% 50
+\bibitem{OmegaEngineering2015}
+Omega Engineering, “Pt100 sensor or resistance thermometer.” [Online]. Available: \url{https://br.omega.com/prodinfo/pt100.html}. Accessed: May 1, 2023.
+
+% 51
+\bibitem{MaximIntegrated2023}
+Maxim Integrated, “MAX31865 datasheet.” [Online]. Available: \url{https://www.alldatasheet.com/datasheet-pdf/pdf/492628/MAXIM/MAX31865.html}. Accessed: May 1, 2023.
+
+% 52
+\bibitem{pastorio20212}
+A. F. Pastório et al., \emph{Fundamentals of LoRaWAN: Theory and practice}. Sociedade Brasileira de Computação, 2021.
+
+% 53
+\bibitem{neto2021the}
+E. S. H. Neto, L. O. Santos, C. F. Andrade, P. C. M. Carvalho, and P. A. C. Rocha, “The influence of wind speed on the PV plant operating temperature: A case study for Fortaleza,” in \emph{Proc. 26th Int. Congr. Mech. Eng. (COBEM)}, 2021, doi: \url{10.26678/ABCM.COBEM2021.COB2021-1663}.
+
+\bibitem{pereira2018}
+R. I. S. Pereira, “Rede de monitoramento IoT aplicada em plantas de microgeração fotovoltaica [IoT monitoring network applied to photovoltaic microgeneration plants],” Tese de Doutorado, Universidade Federal do Ceará, Fortaleza, Brasil, 2018.
+
+\bibitem{montero2016}
+I. M. Dupont, R. I. S. Pereira, P. C. M. de Carvalho, and S. C. S. Jucá, “Sistema embarcado Linux aplicado ao monitoramento em nuvem de planta de microgeração fotovoltaica [Embedded Linux system applied to cloud monitoring of a photovoltaic microgeneration plant],” in \emph{Anais do VI Congresso Brasileiro de Energia Solar (CBENS)}, Belo Horizonte, Brasil, Apr. 2016. doi: \url{https://doi.org/10.59627/cbens.2016.1285}.
+
+\bibitem{almeida2018}
+E. L. A. Neto, D. L. Coriolano, L. C. Santos, V. V. Almeida, H. S. Lisboa, R. R. Santos, I. T. F. Resende, R. T. Figueiredo, and O. L. S. de Alsina, “Estação meteorológica WiFi de baixo custo baseado em ThingSpeak [Low-cost WiFi weather station based on ThingSpeak],” in \emph{Anais do VII Congresso Brasileiro de Energia Solar (CBENS)}, Gramado, Brasil, Apr. 2018. doi: \url{https://doi.org/10.59627/cbens.2018.651}.
+
+\bibitem{Cheddadi2020}
+Y. Cheddadi, H. Cheddadi, F. Cheddadi, F. Errahimi, and N. Es‑Sbai,
+“Design and implementation of an intelligent low‑cost IoT solution for energy monitoring of photovoltaic stations,”
+\emph{SN Appl. Sci.}, vol. 2, Art. no. 1165, 2020. doi: \url{10.1007/s42452-020-2997-4}.
+
+
+\bibitem{Rodrigues2020}
+C. C. Rodrigues, J. M. Martins, L. P. do Nascimento, J. V. N. S. Q. Maciel, O. A. Chase, and J. F. S. de Almeida, 
+“Plataforma de aquisição e controle IoT integrado a sistema de geração fotovoltaica [IoT-based acquisition and control platform integrated into photovoltaic generation system],” 
+in *Energia Elétrica e Sustentabilidade*, Cap. 20, Atena Editora, Belém–PA, 2020, pp. 247–257.
+
+% 5
+\bibitem{rodrigues2020}
+I. Montero Dupont, D. N. Araujo, A. S. P. Teles, P. C. M. Carvalho, and S. C. S. Jucá, “Real-time monitoring of operating temperature of a photovoltaic plant,” \emph{Anais Congresso Brasileiro de Energia Solar - CBENS}, Nov. 2020, doi: \url{10.59627/cbens.2020.897}.
+
+\bibitem{Dupont2020}
+I. M. Dupont, D. N. Araujo, A. S. P. Teles, P. C. M. Carvalho, and S. C. S. Jucá, “Real-time monitoring of operating temperature of a PV plant,” in \emph{Proc. Braz. Congr. Sol. Energ. (CBENS)}, Nov. 2020. doi: \url{https://doi.org/10.59627/cbens.2020.897}.
+
+
+
+\end{thebibliography}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figure/Dionizio.png}}]{Dionizio Porfírio de Assis}
+currently pursuing a Master's degree in Renewable Energies at the Department of Electrical Engineering at the Federal University of Ceará (UFC). Graduated in Telecommunications Engineering from UFC, and works in the field of telecommunications and communication technologie. Additionally, he works as a professor of Python and JavaScript programming and is responsible for the communication system at LEA – Laboratory of Alternative Energies.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figure/Leticia.JPG}}]{Leticia de Oliveira Santos} is currently pursuing a Ph.D. degree in Electrical Engineering at the Federal University of Ceará (UFC), Fortaleza, Brazil. She graduated in Physics in 2017 and completed her Master's degree in Mechanical Engineering at UFC in 2021, in the area of solar thermal and photovoltaics energy. Additionally, she holds a specialization in Electronic and Electromechanical Engineering (2022) and an MBA in Industrial Modernization (2023).
+\end{IEEEbiography}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figure/Janiere.png}}]{JOSÉ JANIERE S. DE SOUZA} is currently pursuing a Ph.D. in Electrical Engineering at the Federal University of Ceará (UFC), in Fortaleza, Ceará, Brazil. He holds a degree in Industrial Mechatronics Technology from the Federal Institute of Ceará (IFCE) (2017) and a Master’s degree in Electrical Engineering from UFC (2020). Currently, he is a Professor of EBTT at IFCE – Cedro Campus.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figure/Renata.jpg}}]{Renata Imaculada Soares Pereira} 
+She is a professor of Electro-electronics at the Federal Institute of Alagoas (IFAL) – Arapiraca Campus and the coordinator of the Espaço 4.0 at IFAL Arapiraca. She conducted postdoctoral research (2019) in Electrical Engineering at UFPB – João Pessoa, focusing on wireless sensor networks and energy harvesting applied to IoT monitoring of photovoltaic plants. She holds a Ph.D. (2018) in Electrical Engineering, with a CAPES/DAAD joint program sandwich scholarship at Technische Hochschule Köln – Germany, and a Master's degree (2014) in Electrical Engineering, both from the Federal University of Ceará (UFC), with a focus on IoT monitoring of photovoltaic plants.
+\end{IEEEbiography}
+
+
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figure/Paulo.png}}]{Paulo Cesar Marques de Carvalho}
+\textcolor{blue}{
+Full professor of the Department of Electrical Engineering at the Federal University of Ceará (UFC). Degree in Electrical Engineering from UFC (1989), a master’s degree in electrical engineering from UFPB (1992), and a doctor- ate in Electrical Engineering from the University of Paderborn, Germany (1997). Coordinator of the Laboratory of Alternative Energies and CNPq researcher.
+}
+
+\end{IEEEbiography}
+
+\EOD
+
+\end{document}
