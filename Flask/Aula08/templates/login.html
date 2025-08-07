@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<h1>Página de login</h1>
+
+<form action="{{url_for('login')}}" method="post">
+
+    <div>
+        <label for="email">E-mail</label>
+        <input type="text" name="email" id="email">
+    </div>
+    <div>
+        <label for="senha">Senha</label>
+        <input type="password" name="senha" id="senha">
+    </div>
+    <input type="submit" value="logar">
+
+</form>
+
+{% endblock %}

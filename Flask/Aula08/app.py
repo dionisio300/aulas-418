@@ -1,5 +1,9 @@
 from flask import Flask, render_template,request,redirect,url_for
 import mysql.connector as my
+# Importar o bcrypt para criptografar a senha
+import bcrypt
+
+
 
 def conectar():
     conexao = my.connect(
@@ -53,6 +57,19 @@ def cadastrar():
         nome = request.form.get('nome')
         email = request.form.get('email')
         senha = request.form.get('senha')
+
+       # exemplo de criptografia e verificação da senha
+        senha_criptografada = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt())
+        print(senha_criptografada)
+
+        senha = senha_criptografada
+        # senha = '1234'
+        # # Verificando a senha
+        # if bcrypt.checkpw(senha.encode('utf-8'), senha_criptografada):
+        #     print("Senha correta")
+        # else:
+        #     print("Senha incorreta")
+    
         dtNascimento = request.form.get('dataNascimento')
         cpf = request.form.get('cpf')
         cep = request.form.get('cep')
@@ -77,6 +94,17 @@ def cadastrar():
 
         print(f'Nome: {nome}, Email: {email}, senha: {senha}, Data: {dtNascimento}, CPF: {cpf}, CEP: {cep}, Tipo Usuário: {tipoUsuario}')
         return render_template('cadastrar.html')
+
+@app.route('/login', methods = ['GET','POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    if request.method == 'POST':
+        email = request.form.get('email')
+        senha = request.form.get('senha')
+        print(f'email: {email}, senha: {senha}')
+        return render_template('login.html')
+
 
 
 app.run(debug=True)
