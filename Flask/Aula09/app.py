@@ -1,4 +1,4 @@
-from flask import Flask, render_template,request,redirect,url_for
+from flask import Flask, render_template,request,redirect,url_for,session
 import mysql.connector as my
 # Importar o bcrypt para criptografar a senha
 import bcrypt
@@ -74,26 +74,29 @@ def cadastrar():
         cpf = request.form.get('cpf')
         cep = request.form.get('cep')
         tipoUsuario = request.form.get('tipoUsuario')
-
+        deuCerto = False
         try:
             conexao = conectar()
             cursor = conexao.cursor(dictionary=True)
-            sql = "INSERT INTO usuarios (nome, data_nascimento, cpf, cep, tipo_usuario,senha) VALUES (%s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql,(nome,dtNascimento,cpf,cep,tipoUsuario,senha))
+            sql = "INSERT INTO usuarios (nome,email, data_nascimento, cpf, cep, tipo_usuario,senha) VALUES (%s,%s, %s, %s, %s, %s, %s)"
+            cursor.execute(sql,(nome,email,dtNascimento,cpf,cep,tipoUsuario,senha))
             conexao.commit()
             conexao.close()
+            deuCerto = True
+            return redirect(url_for('confirmacao', deuCerto=deuCerto))
+        
         except my.Error as erroMy:
             print(f'Erro no mySql {erroMy}')
-            erro = True
-            return render_template('cadastrar.html',erro = erro)
+
+            erro = erroMy.errno
+            if erro == '1060':
+                erro = 'Entrada duplicada'
+            print(erro)
+            return redirect(url_for('confirmacao', deuCerto=deuCerto, erro=erroMy))
         except Exception as e:
             print(f'Houve um erro: {e}')
             erro = True
-            return render_template('cadastrar.html',erro = erro)
-
-
-        print(f'Nome: {nome}, Email: {email}, senha: {senha}, Data: {dtNascimento}, CPF: {cpf}, CEP: {cep}, Tipo Usuário: {tipoUsuario}')
-        return render_template('cadastrar.html')
+            return redirect(url_for('confirmacao', deuCerto=deuCerto, erro=erro))
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
@@ -103,8 +106,53 @@ def login():
         email = request.form.get('email')
         senha = request.form.get('senha')
         print(f'email: {email}, senha: {senha}')
-        return render_template('login.html')
+        conexao = conectar()
+        cursor = conexao.cursor(dictionary=True)
+        sql = 'select * from usuarios where email = %s'
+        cursor.execute(sql,(email,))
+        usuario = cursor.fetchone()
 
+        if usuario:
+            if senha == usuario["senha"]:
+
+                session['usuario_nome'] = usuario["nome"]
+                session['usuario_tipo'] = usuario["tipo_usuario"]
+
+                if usuario["tipo_usuario"] == 'prestador':
+                    return redirect(url_for('paginaPrestador'))
+                elif usuario["tipo_usuario"] == 'cliente':
+                    return redirect(url_for('paginaCliente'))
+            else:
+                print('Errou a senha')
+                return redirect(url_for('login'))
+        else:
+            print('Usuario não encontrado')
+            return render_template('login.html')
+    
+
+@app.route('/confirmacao')
+def confirmacao():
+    deuCerto = request.args.get('deuCerto')
+    deuCerto = deuCerto == 'True'
+    erro = request.args.get('erro')
+    print(deuCerto)
+    return render_template('confirmacao.html', deuCerto=deuCerto, erro=erro)
+
+@app.route('/paginaPrestador')
+def paginaPrestador():
+    if session:
+        if session.get('usuario_tipo') != 'prestador':
+            return redirect(url_for('paginaInicial'))    
+        else:
+            # Aqui vai o código da página
+            return render_template('paginaPrestador.html')
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/paginaCliente')
+def paginaCliente():
+    return render_template('paginaCliente.html')
 
 
 app.run(debug=True)

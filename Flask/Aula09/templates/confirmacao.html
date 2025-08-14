@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+{% if deuCerto %}
+
+<meta http-equiv="refresh" content="2;url={{ url_for('login') }}">
+
+<h1>Cadastro realizado com sucesso!!!</h1>
+
+{% else %}
+<meta http-equiv="refresh" content="2;url={{ url_for('cadastrar') }}">
+
+
+<h1>Problema ao preencher o cadastro!</h1>
+<h2>Erro = {{ erro }}</h2>
+
+{% endif %}
+
+{% endblock %}
