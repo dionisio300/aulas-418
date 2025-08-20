@@ -3,8 +3,6 @@ import mysql.connector as my
 # Importar o bcrypt para criptografar a senha
 import bcrypt
 
-
-
 def conectar():
     conexao = my.connect(
         host='localhost',
