@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<div>
+    <h1>Página de cadastro</h1>
+</div>
+
+<form action="{{url_for('agendar')}}" method="post">
+    <div>
+        <label for="nome">Nome: </label>
+        <style>
+            form {
+            max-width: 400px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+            form div {
+            margin-bottom: 15px;
+            }
+            label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            }
+            input[type="text"],
+            input[type="email"],
+            input[type="telefone"],
+            input[type="date"],
+            input[type="time"],
+            select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            }
+            input[type="submit"] {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+            }
+            input[type="submit"]:hover {
+            background: #0056b3;
+            }
+        </style>
+        <input type="text" name="nome" id="nome">
+    </div>
+    <div>
+        <label for="email">E-mail: </label>
+        <input type="email" name="email" id="email">
+    </div>
+
+    <div>
+        <label for="telefone">Telefone: </label>
+        <input type="telefone" name="telefone" id="telefone">
+    </div>
+    <div>
+        <label for="data">Data: </label>
+        <input type="date" name="data" id="data">
+    </div>
+    <div>
+        <label for="hora">Hora: </label>
+        <input type="time" name="hora" id="hora">
+    </div>
+    <div>
+        <label for="servico">Serviço: </label>
+        <select name="servico" id="servico">
+            <option value="1">Serviço 1</option>
+            <option value="2">Serviço 2</option>
+            <option value="3">Serviço 3</option>
+            <option value="4">Serviço 4</option>
+        </select>
+    </div>
+    <input type="submit" value="Enviar">
+</form>
+
+
+
+{% endblock %}
