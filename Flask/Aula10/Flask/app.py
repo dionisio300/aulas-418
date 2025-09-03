@@ -2,7 +2,7 @@ from flask import Flask, render_template,request,redirect,url_for,session
 import mysql.connector as my
 # Importar o bcrypt para criptografar a senha
 import bcrypt
-
+from classes import Carro
 
 
 def conectar():
@@ -23,8 +23,6 @@ conectar()
 app = Flask(__name__)
 
 app.secret_key = '1234'
-
-
 
 @app.route('/')
 def paginaInicial():

@@ -1,0 +1,2 @@
+from veiculos import Veiculo
+
