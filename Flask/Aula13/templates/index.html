@@ -3,6 +3,151 @@
 
 {% block conteudo %}
 
-<h1>Página Inicial</h1>
+<style>
+    .altura1{
+        height: 80px;
+    }
+    .altura2{
+        height: 700px;
+    }
+</style>
+
+
+
+<h1 class="meuTitulo">Página Inicial</h1>
+
+<h1 class="text-center">Classes de texto</h1>
+
+<p class="text-start text-success bg-dark">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, esse. Amet culpa distinctio animi cumque quibusdam voluptatem enim odio exercitationem iste velit sapiente unde vero, doloremque a aliquam neque optio.
+</p>
+
+<p class="text-center bg-danger text-light">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate dolores repellendus consequuntur. Recusandae quam deleniti facilis, eveniet eos sunt quaerat illum incidunt, veritatis unde voluptatibus quo cum nisi, nobis esse!
+</p>
+
+<p class="text-end text-warning bg-primary">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure laudantium enim quo est minus. Illum, temporibus quam blanditiis accusantium, nisi exercitationem esse deserunt quibusdam, voluptate sint enim nihil nesciunt voluptates?
+</p>
+
+<div class="badge text-bg-primary text-wrap" style="width: 6rem;">
+  This text should wrap.
+</div>
+
+<p class="fs-1 fw-bolder">texto 1</p>
+<p class="fs-2 fw-bold">texto 2</p>
+<p class="fs-3 fst-italic">texto 3</p>
+<p class="fs-4">texto 4</p>
+<p class="fs-5">texto 5</p>
+<p class="fs-6">texto 6</p>
+
+<a class="d-block text-decoration-none text-center fs-1" href="">Click aqui</a>
+
+
+<div class="container bg-primary">
+    <h1>Esse é o container</h1>
+
+    <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis accusamus expedita pariatur. Corrupti veniam odit omnis quisquam placeat minima similique optio quibusdam sapiente eaque, beatae eos nostrum numquam officiis quis!
+    </p>
+    <div class="row justify-content-between">
+        <div style="width: 40%;">
+            <h1>Essa é uma linha</h1>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident nobis mollitia dicta perferendis assumenda minima eveniet, asperiores hic cupiditate consequuntur soluta quisquam aspernatur ex delectus a dolores, repellendus necessitatibus reprehenderit!
+            </p>
+        </div>
+        <div style="width: 40%;">
+            <h1>Outra div na linha</h1>
+            <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste, repudiandae nobis debitis maxime minima porro esse ipsum, commodi dolorem quaerat rerum. Minus veniam aspernatur nisi deserunt saepe consequatur ad quisquam?
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<div class="container-fluid bg-info">
+    <h1>Esse é o container fluid</h1>
+
+    <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis accusamus expedita pariatur. Corrupti veniam odit omnis quisquam placeat minima similique optio quibusdam sapiente eaque, beatae eos nostrum numquam officiis quis!
+    </p>
+
+    <div class="row">
+        <div class="col-4 border">
+            Coluna 1
+        </div>
+        <div class="col-4 border">
+            Coluna 2
+        </div>
+        <div class="col-4 border border-dark">
+            Coluna 3
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-6 border">
+            <h1>Esse é o espaço de 6 colunas</h1>
+
+            <p>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum nam exercitationem laudantium nesciunt asperiores corporis esse cumque possimus, autem aspernatur beatae itaque eos assumenda vero in praesentium recusandae, dicta libero.
+            </p>
+        </div>
+    </div>
+
+    <div class="row row-cols-6 border">
+        <div class="border">
+            teste
+        </div>
+        <div class="border">
+            teste
+        </div>
+        <div class="border">
+            teste
+        </div>
+        <div class="border">
+            teste
+        </div>
+        <div class="border">
+            teste
+        </div>
+        <div class="border">
+            teste
+        </div>
+        
+
+    </div>
+</div>
+
+<div class="container-fluid bg-black altura1">
+    <h1 class="text-light text-center" >Barra de navegação</h1>
+</div>
+
+<div class="container">
+    <div class="row bg-warning altura2">
+        <div class="col-2 bg-danger border">
+            <h2>Menu lateral</h2>
+        </div>
+
+        <div class="col-8 bg-danger border">
+            <h1>Conteúdo Principal</h1>
+        </div>
+        <div class="col-2 bg-danger border">
+            <h2 class="text-wrap">Segundo menu</h2>
+        </div>
+
+    </div>
+</div>
+
+<div class="container-fluid bg-primary altura1">
+    <h1 class="text-center">Rodapé</h1>
+</div>
+
+
+
+
+
+
 
 {% endblock %}
