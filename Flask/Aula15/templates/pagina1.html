@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner" style="height: 700px;">
+
+        <div class="container">
+
+            <div class="carousel-item active">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/CENU%2C_S%C3%A3o_Paulo%2C_Brasil_%28cropped%29.jpg/1200px-CENU%2C_S%C3%A3o_Paulo%2C_Brasil_%28cropped%29.jpg"
+                    class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="https://revistapesquisa.fapesp.br/wp-content/uploads/2018/09/012-017_Notas_271-1200px-13.jpg"
+                    class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Recife_-_Vista_a%C3%A9rea_a_partir_do_bairro_do_Recife.jpg/1200px-Recife_-_Vista_a%C3%A9rea_a_partir_do_bairro_do_Recife.jpg"
+                    class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+
+<div class="container border border-5 border-black">
+    <div class="row">
+        <div class="col-4 bg-danger mt-5 mb-4">
+            <div class="bg-black text-white mt-5 me-4 ms-1">
+                <p>Coluna1</p>
+            </div>
+        </div>
+        <div style="height: 300px;" class="col-4 bg-secondary" >
+            <div class="bg-light p-5">
+                <p>Coluna2</p>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="bg-warning">
+                <h2>Coluna3</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container border border-5 border-black mt-5">
+    <div class="row flex-column">
+        <div class="bg-warning w-25">
+            <p>w-25</p>
+        </div>
+        <div class="bg-success w-50">
+            <p>w-50</p>
+        </div>
+        <div class="bg-danger w-75">
+            <p>w-75</p>
+        </div>
+        <div class="bg-primary w-100">
+            <p>w-100</p>
+        </div>
+    </div>
+
+</div>
+
+<div class="container border border-5 border-black mt-5">
+    <div class="row" style="height: 250px;">
+        <div class="bg-warning w-25 h-25 my-auto">
+            <p>h-25</p>
+        </div>
+        <div class="bg-success w-25 h-50 my-auto">
+            <p>h-50</p>
+        </div>
+        <div class="bg-danger w-25 h-75 my-auto">
+            <p>h-75</p>
+        </div>
+        <div class="bg-primary w-25 h-100">
+            <p>h-100</p>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+{% endblock %}
