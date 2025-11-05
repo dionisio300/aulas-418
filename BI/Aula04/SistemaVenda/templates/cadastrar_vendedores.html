@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<div class="container mt-5">
+  <h2>Cadastrar Vendedor</h2>
+  <form method="POST" action="{{ url_for('cadastrar_vendedores') }}" class="mt-3 col-md-6">
+    <div class="mb-3">
+      <label class="form-label">Nome do Vendedor</label>
+      <input type="text" name="nome" class="form-control" placeholder="Digite o nome do vendedor" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Voltar</a>
+  </form>
+</div>
+
+
+{% endblock %}

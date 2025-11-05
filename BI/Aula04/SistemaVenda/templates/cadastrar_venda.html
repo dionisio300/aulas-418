@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+
+<div class="container mt-5">
+  <h2>Registrar Venda</h2>
+  <form method="POST" action="{{ url_for('cadastrar_venda') }}" class="mt-3 col-md-6">
+    <div class="mb-3">
+      <label class="form-label">Produto</label>
+      <select name="produto_id" class="form-select" required>
+        <option value="" selected disabled>Selecione o produto</option>
+        {% for produto in produtos %}
+          <option value="{{ produto[0] }}">{{ produto[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Vendedor</label>
+      <select name="vendedor_id" class="form-select" required>
+        <option value="" selected disabled>Selecione o vendedor</option>
+        {% for vendedor in vendedores %}
+          <option value="{{ vendedor[0] }}">{{ vendedor[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Quantidade</label>
+      <input type="number" name="quantidade" class="form-control" min="1" value="1" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Preço Unitário (R$)</label>
+      <input type="number" name="preco_unit" class="form-control" step="0.01" required>
+    </div>
+
+    <div class="mb-3">
+  <label class="form-label">Data da Venda</label>
+  <input type="date" name="data_venda" class="form-control" required>
+</div>
+
+
+    <button type="submit" class="btn btn-warning">Registrar Venda</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Voltar</a>
+  </form>
+</div>
+
+
+
+{% endblock %}
