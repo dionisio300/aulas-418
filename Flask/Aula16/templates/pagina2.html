@@ -4,4 +4,48 @@
 
 <h1>Pagina 2</h1>
 
+<h2>Lista de produtos</h2>
+
+<div class="card" style="width: 18rem;">
+    <div class="text-center mt-3">
+        <img src="https://m.media-amazon.com/images/I/51941W6NNuL._AC_SX679_.jpg" class="" alt="spyderman"
+            height="150px">
+    </div>
+
+    <div class="card-body">
+        <h5 class="card-title">Homem-Aranha</h5>
+        <p class="card-text">Action figure do Homem-Aranha</p>
+        <p>Preço: R$ 100,00</p>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Comprar
+        </button>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Boneco do Homem-Aranha</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus, cupiditate pariatur ullam optio, labore vero omnis cumque, aliquid possimus molestiae inventore corporis laborum atque illum! Officiis ut nihil aliquam vitae.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia nemo laborum possimus maiores rerum voluptas provident amet, iste dicta tempore sequi ut voluptates deserunt dolore quam incidunt porro eaque reprehenderit?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Comprar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

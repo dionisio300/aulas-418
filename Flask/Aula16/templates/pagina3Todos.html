@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+{% if erro %}
+<h1>Erro ao fazer a requisição</h1>
+
+
+{% else %}
+
+    {% for dado in dados %}
+
+    <div>
+        <h2>{{dado.title}}</h2>
+    </div>
+
+    {% endfor %}
+
+{% endif %}
+
+
+{% endblock %}

@@ -93,11 +93,10 @@
 <div class="container border border-3 border-black mt-4 p-4 rounded">
     <div class="row">
         <div class="col-6 mx-auto">
-            <form class="bg-light p-4">
+            <form class="bg-light p-4" action="{{url_for('index')}}" method="post">
 
                 <div class="mb-3">
                     <label for="nome" class="form-label">Nome:</label>
-
                     <input type="text" class="form-control" id="nome" aria-describedby="emailHelp" name="nome">
                 </div>
 
@@ -123,21 +122,18 @@
                 <label class="form-check-label">Linguagens conhecidas</label>
                 <br><br>
                 <div class="mb-3">
-
-
-                    <input type="checkbox" class="form-check-input" id="ling1">
+                    <input type="checkbox" class="form-check-input" id="ling1" name="linguagem" value="python">
                     <label class="form-check-label" for="ling1">Python</label>
 
-                    <input type="checkbox" class="form-check-input" id="ling2">
+                    <input name="linguagem" value="javascript" type="checkbox" class="form-check-input" id="ling2">
                     <label class="form-check-label" for="ling2">JavaScript</label>
 
-                    <input type="checkbox" class="form-check-input" id="sql">
+                    <input name="linguagem" value="sql" type="checkbox" class="form-check-input" id="sql">
                     <label class="form-check-label" for="sql">SQL</label>
                 </div>
 
                 <label for="vaga">Selecione a Vaga desejada</label>
                 
-
                 <select id="vaga" name="vaga" class="form-select mt-5" aria-label="Default select example">
                     <option selected>Selecione</option>
                     <option value="1">Desenvolvimento</option>

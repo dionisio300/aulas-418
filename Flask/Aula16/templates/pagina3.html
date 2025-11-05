@@ -4,4 +4,31 @@
 
 <h1>Página 3</h1>
 
+{% if erro %}
+
+<h1>Não deu certo a requisição</h1>
+
+{% else %}
+
+<div class="card" style="width: 18rem;">
+    <div class="text-center mt-3">
+        <img src="{{dados.image}}" class="" alt="spyderman"
+            height="150px">
+    </div>
+
+    <div class="card-body">
+        <h5 class="card-title">{{dados.title}}</h5>
+        <p class="card-text">{{dados.category}}</p>
+        <p>Preço: R$ {{dados.price}}</p>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Comprar
+        </button>
+
+    </div>
+</div>
+
+
+{% endif %}
+
 {% endblock %}
