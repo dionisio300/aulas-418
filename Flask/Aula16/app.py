@@ -61,4 +61,4 @@ def pagina3(id):
         return render_template('pagina3.html',erro=erro)
 
 
-app.run(debug=True)
+app.run(debug=True, port=5001)
