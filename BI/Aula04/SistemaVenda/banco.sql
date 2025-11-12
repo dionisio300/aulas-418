@@ -1,4 +1,5 @@
-CREATE DATABASE IF NOT EXISTS fastphone CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; USE fastphone; -- dimensões CREATE TABLE IF NOT EXISTS 
+CREATE DATABASE IF NOT EXISTS fastphone CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; USE fastphone; -- dimensões 
+CREATE TABLE IF NOT EXISTS 
 produtos ( id INT AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(120) NOT NULL, categoria VARCHAR(60) NOT NULL ); 
 
 CREATE TABLE IF NOT EXISTS vendedores ( id INT AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(120) NOT NULL ); -- fato simples de vendas 
